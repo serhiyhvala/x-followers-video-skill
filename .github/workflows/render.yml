@@ -1,0 +1,58 @@
+# Renders a milestone video on GitHub's runners, for machines that cannot run Chrome or FFmpeg.
+# Put your data.json (and pfp/ photos) in a PRIVATE copy of this repo, then Actions → "Render milestone video"
+# → Run workflow. The MP4 is attached to the run as an artifact. Without a data.json it renders the sample.
+name: Render milestone video
+
+on:
+  workflow_dispatch:
+    inputs:
+      template:
+        description: Template
+        type: choice
+        default: wall
+        options: [wall, mosaic, receipt, terminal, all]
+      aspect:
+        description: Aspect ratio
+        type: choice
+        default: 16x9
+        options: [16x9, 9x16, all]
+      data:
+        description: Path to data.json in this repo
+        default: data.json
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Pick data
+        id: data
+        run: |
+          if [ -f "${{ inputs.data }}" ]; then echo "file=${{ inputs.data }}" >> "$GITHUB_OUTPUT"; else echo "file=examples/data.json" >> "$GITHUB_OUTPUT"; echo "::notice::no ${{ inputs.data }}; rendering the sample data"; fi
+      - name: Fetch avatars still given as URLs
+        run: node scripts/fetch-avatars.mjs "${{ steps.data.outputs.file }}"
+      - name: Build
+        run: node scripts/build.mjs --data "${{ steps.data.outputs.file }}" --template "${{ inputs.template }}" --aspect "${{ inputs.aspect }}" --out out
+      - name: Chrome for the renderer
+        run: npx --yes hyperframes@0.9.23 browser ensure
+      - name: Render
+        run: |
+          set -e
+          mkdir -p renders
+          for p in out/*/; do
+            name=$(basename "$p")
+            (cd "$p" && npx --yes hyperframes@0.9.23 check --json > check.json || true)
+            (cd "$p" && npx --yes hyperframes@0.9.23 render --quality delivery --output "../../renders/$name.mp4")
+          done
+          ls -la renders
+      - uses: actions/upload-artifact@v4
+        with:
+          name: milestone-videos
+          path: renders/*.mp4
+          retention-days: 14

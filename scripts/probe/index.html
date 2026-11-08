@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      html, body { margin: 0; width: 640px; height: 360px; overflow: hidden; background: #ffffff; }
+      #probe-text { position: absolute; left: 60px; top: 140px; font: 900 72px Inter, sans-serif; color: #0b0b0c; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="640" data-height="360">
+      <p id="probe-text">render ok</p>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#probe-text", { x: 0 }, { x: 120, duration: 0.9, ease: "power2.out" }, 0);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- A stand-in for x.com pages with the same DOM hooks collect-x.js reads. Open it in a browser with
+     ?page=profile | ?page=followers | ?page=analytics, inject scripts/collect-x.js, and read window.xmv.export().
+     The script keys on location.pathname, so serve this file at /ada_example, /ada_example/followers and
+     /i/account_analytics (scripts/test/collect-test.mjs does that). -->
+<html lang="en">
+<head><meta charset="utf-8" /><title>fixture</title></head>
+<body>
+<main>
+  <div id="profile" hidden>
+    <div data-testid="UserName"><span>Ada Example</span><span>@ada_example</span></div>
+    <a href="/ada_example/photo"><img src="https://pbs.twimg.com/profile_images/1/ada_x96.jpg" /></a>
+    <a href="/ada_example/following">256 Following</a>
+    <a href="/ada_example/verified_followers">160 Followers</a>
+  </div>
+  <div id="followers" hidden>
+    <div data-testid="UserCell">
+      <a href="/priyabuilds"><img src="https://pbs.twimg.com/profile_images/11/p_x96.jpg" /></a>
+      <a href="/priyabuilds"><span>Priya Raman | builds in public</span></a>
+      <a href="/priyabuilds"><span>@priyabuilds</span></a>
+      <div>Follows you</div>
+    </div>
+    <div data-testid="UserCell">
+      <a href="/lixiaoming_dev"><img src="https://pbs.twimg.com/profile_images/12/l_normal.png" /></a>
+      <div><a href="/lixiaoming_dev"><span>李晓明</span></a></div>
+      <div><a href="/lixiaoming_dev"><span>@lixiaoming_dev</span></a></div>
+    </div>
+    <div data-testid="UserCell">
+      <a href="/hanasato_dev"><span>Hana Sato 🌸</span></a>
+      <a href="/hanasato_dev"><span>@hanasato_dev</span></a>
+    </div>
+  </div>
+  <div id="analytics" hidden>
+    <h2>Impressions</h2><p>111.2K</p><p>+84%</p><p>Nov 2 – Nov 8, 2026</p>
+    <div class="recharts-wrapper" id="chart-imp"></div>
+    <div class="recharts-wrapper" id="chart-fol"></div>
+  </div>
+</main>
+<script>
+  var page = new URLSearchParams(location.search).get("page") || (location.pathname.indexOf("analytics") >= 0 ? "analytics" : location.pathname.indexOf("followers") >= 0 ? "followers" : "profile");
+  document.getElementById(page).hidden = false;
+  // Fake React fibers: the chart's data sits a few `.return` hops up, as on x.com.
+  function fiber(el, data) {
+    var leaf = { memoizedProps: {}, return: { memoizedProps: {}, return: { memoizedProps: { data: data }, return: null } } };
+    el["__reactFiber$fixture"] = leaf;
+  }
+  var days = ["Nov 2", "Nov 3", "Nov 4", "Nov 5", "Nov 6", "Nov 7", "Nov 8"];
+  fiber(document.getElementById("chart-imp"), days.map(function (d, i) { return { date: d, impressions: [31240, 18772, 9530, 7415, 26108, 12290, 5860][i] }; }));
+  fiber(document.getElementById("chart-fol"), days.map(function (d, i) { return { date: d, follows: [14, 9, 6, 3, 19, 7, 11][i], unfollows: [2, 1, 0, 3, 2, 0, 1][i] }; }));
+</script>
+</body>
+</html>
