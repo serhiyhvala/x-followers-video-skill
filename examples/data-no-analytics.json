@@ -1,0 +1,312 @@
+{
+  "$comment": "Sample without analytics: the stats scene is dropped.",
+  "milestone": 160,
+  "me": {
+    "name": "Ada Example",
+    "handle": "ada_example",
+    "avatar": null
+  },
+  "followers": [
+    {
+      "name": "Priya Raman",
+      "handle": "priyabuilds",
+      "avatar": null
+    },
+    {
+      "name": "Tomás Ferreira",
+      "handle": "tomasferreira_",
+      "avatar": null
+    },
+    {
+      "name": "Mina Okafor",
+      "handle": "minaokafor",
+      "avatar": null
+    },
+    {
+      "name": "Leo Castellano",
+      "handle": "leocastellano",
+      "avatar": null
+    },
+    {
+      "name": "Hana Sato 🌸",
+      "handle": "hanasato_dev",
+      "avatar": null
+    },
+    {
+      "name": "Dev Mehta",
+      "handle": "devmehta42",
+      "avatar": null
+    },
+    {
+      "name": "Astrid Lindqvist",
+      "handle": "astridlq",
+      "avatar": null
+    },
+    {
+      "name": "Kwame Boateng",
+      "handle": "kwameboateng",
+      "avatar": null
+    },
+    {
+      "name": "Ximena Ortiz",
+      "handle": "ximenaortiz",
+      "avatar": null
+    },
+    {
+      "name": "Jonas Weber",
+      "handle": "jonasweber_io",
+      "avatar": null
+    },
+    {
+      "name": "Yuki Tanaka",
+      "handle": "yukitanaka",
+      "avatar": null
+    },
+    {
+      "name": "Olu Adeyemi",
+      "handle": "oluadeyemi",
+      "avatar": null
+    },
+    {
+      "name": "Marguerite Delacroix-Bauer",
+      "handle": "margueritedb",
+      "avatar": null
+    },
+    {
+      "name": "Sam Oyelaran",
+      "handle": "samoyelaran",
+      "avatar": null
+    },
+    {
+      "name": "Ingrid Haugen",
+      "handle": "ingridhaugen",
+      "avatar": null
+    },
+    {
+      "name": "Rafael Nunes",
+      "handle": "rafanunes",
+      "avatar": null
+    },
+    {
+      "name": "李晓明",
+      "handle": "lixiaoming_dev",
+      "avatar": null
+    },
+    {
+      "name": "Chloé Martin",
+      "handle": "chloemartin",
+      "avatar": null
+    },
+    {
+      "name": "Bartek Nowak",
+      "handle": "barteknowak",
+      "avatar": null
+    },
+    {
+      "name": "Amara Nwosu",
+      "handle": "amaranwosu",
+      "avatar": null
+    },
+    {
+      "name": "Felix Brandt",
+      "handle": "felixbrandt",
+      "avatar": null
+    },
+    {
+      "name": "Noor Haddad",
+      "handle": "noorhaddad",
+      "avatar": null
+    },
+    {
+      "name": "Diego Salazar",
+      "handle": "diegosalazar",
+      "avatar": null
+    },
+    {
+      "name": "Elif Yılmaz",
+      "handle": "elifyilmaz",
+      "avatar": null
+    },
+    {
+      "name": "Kenji Watanabe",
+      "handle": "kenjiwatanabe",
+      "avatar": null
+    },
+    {
+      "name": "Sofia Ricci",
+      "handle": "sofiaricci_",
+      "avatar": null
+    },
+    {
+      "name": "Mateo Vargas",
+      "handle": "mateovargas",
+      "avatar": null
+    },
+    {
+      "name": "Anya Petrova",
+      "handle": "anyapetrova",
+      "avatar": null
+    },
+    {
+      "name": "Tariq Al-Sayed",
+      "handle": "tariqalsayed",
+      "avatar": null
+    },
+    {
+      "name": "Lucía Fernández",
+      "handle": "luciafdz",
+      "avatar": null
+    },
+    {
+      "name": "Owen Gallagher",
+      "handle": "owengallagher",
+      "avatar": null
+    },
+    {
+      "name": "Zara Iqbal",
+      "handle": "zaraiqbal",
+      "avatar": null
+    },
+    {
+      "name": "Nikolai Volkov",
+      "handle": "nikolaivolkov",
+      "avatar": null
+    },
+    {
+      "name": "Beatriz Costa",
+      "handle": "beatrizcosta",
+      "avatar": null
+    },
+    {
+      "name": "Ravi Shankar Iyer",
+      "handle": "ravi_s_iyer",
+      "avatar": null
+    },
+    {
+      "name": "Maya Lindgren",
+      "handle": "mayalindgren",
+      "avatar": null
+    },
+    {
+      "name": "Idris Diallo",
+      "handle": "idrisdiallo",
+      "avatar": null
+    },
+    {
+      "name": "Greta Hoffmann",
+      "handle": "gretahoffmann",
+      "avatar": null
+    },
+    {
+      "name": "Theo Beaumont",
+      "handle": "theobeaumont",
+      "avatar": null
+    },
+    {
+      "name": "Aiko Mori",
+      "handle": "aikomori",
+      "avatar": null
+    },
+    {
+      "name": "Sebastián Rojas",
+      "handle": "sebasrojas",
+      "avatar": null
+    },
+    {
+      "name": "Farah Qureshi",
+      "handle": "farahqureshi",
+      "avatar": null
+    },
+    {
+      "name": "Marcus Thorne",
+      "handle": "marcusthorne",
+      "avatar": null
+    },
+    {
+      "name": "Ines Lopes",
+      "handle": "ineslopes",
+      "avatar": null
+    },
+    {
+      "name": "Hiro Nakamura",
+      "handle": "hironakamura",
+      "avatar": null
+    },
+    {
+      "name": "Camille Dubois",
+      "handle": "camilledubois",
+      "avatar": null
+    },
+    {
+      "name": "Arjun Patel",
+      "handle": "arjunpatel_dev",
+      "avatar": null
+    },
+    {
+      "name": "Nadia Rahman",
+      "handle": "nadiarahman",
+      "avatar": null
+    },
+    {
+      "name": "Wiktor Zieliński",
+      "handle": "wiktorziel",
+      "avatar": null
+    },
+    {
+      "name": "Esme Whitfield",
+      "handle": "esmewhitfield",
+      "avatar": null
+    },
+    {
+      "name": "Kofi Mensah",
+      "handle": "kofimensah",
+      "avatar": null
+    },
+    {
+      "name": "Lena Fischer",
+      "handle": "lenafischer",
+      "avatar": null
+    },
+    {
+      "name": "Jules Moreau",
+      "handle": "julesmoreau",
+      "avatar": null
+    },
+    {
+      "name": "Simone Bianchi",
+      "handle": "simonebianchi",
+      "avatar": null
+    },
+    {
+      "name": "Pablo Herrera",
+      "handle": "pabloherrera",
+      "avatar": null
+    },
+    {
+      "name": "Rin Takahashi",
+      "handle": "rintakahashi",
+      "avatar": null
+    },
+    {
+      "name": "the dead pixel",
+      "handle": "thedeadpixel",
+      "avatar": null
+    },
+    {
+      "name": "0xMira",
+      "handle": "0xmira",
+      "avatar": null
+    },
+    {
+      "name": "Caleb Osei-Bonsu",
+      "handle": "calebosei",
+      "avatar": null
+    },
+    {
+      "name": "Freya Jónsdóttir",
+      "handle": "freyajons",
+      "avatar": null
+    }
+  ],
+  "collectedAt": "2026-11-08"
+}

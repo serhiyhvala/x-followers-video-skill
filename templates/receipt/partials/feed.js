@@ -5,14 +5,15 @@
       const BEFORE = {{printedBefore}};
       const STRIPS = {{stripsJson}};
       const paper = document.getElementById("rc-paper");
-      const emergedBefore = HEIGHTS.slice(0, BEFORE).reduce((a, b) => a + b, 0);
+      // "emerged" is the paper length past the slot: the 60 px top pad plus every printed line.
+      const emergedBefore = 60 + HEIGHTS.slice(0, BEFORE).reduce((a, b) => a + b, 0);
       gsap.set(paper, { y: -emergedBefore });
       HEIGHTS.forEach((h, i) => {
         if (i >= BEFORE) gsap.set("#rl-" + i, { clipPath: "inset(100% 0 0 0)", autoAlpha: 0 });
       });
       if ({{reelsSettled}}) STRIPS.forEach((s, pos) => gsap.set("#rdg-" + pos, { yPercent: -(100 * (s.length - 1)) / s.length }));
       // Lines that have risen above the frame are hidden, so nothing is sampled where nothing shows.
-      const viewH = document.getElementById("rc-view").offsetHeight;
+      const viewH = {{viewH}}; // never read layout here: HyperFrames mounts the scene before it is laid out
       const tops = [];
       HEIGHTS.reduce((acc, h, i) => ((tops[i] = acc), acc + h), 60);
       const hidden = new Set();

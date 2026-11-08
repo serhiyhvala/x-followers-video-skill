@@ -83,6 +83,7 @@ export default function generate(ctx) {
   out(`${prompt}<span class="t-cursor"></span>`, "prompt");
   const scene3End = lines.length;
 
+  const heights = lines.map((l) => l.height ?? line);
   const markup = (upTo) =>
     lines
       .slice(0, upTo)
@@ -150,6 +151,7 @@ export default function generate(ctx) {
       blockFont,
       blockLine,
       visibleH: win.height - bar - 2 * pad,
+      heightsJson: JSON.stringify(heights),
       title: `followers — ${cols}×${visibleRows}`,
     },
   };

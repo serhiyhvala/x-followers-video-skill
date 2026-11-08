@@ -3,10 +3,12 @@
       const TIMES = {{timesJson}};
       const BEFORE = {{typedBefore}};
       const VIEW_H = {{visibleH}};
+      const HEIGHTS = {{heightsJson}};
+      const CH_W = {{font}} * 0.6; // JetBrains Mono advance width; no layout reads here (the scene may not be laid out yet)
       const outEl = document.getElementById("t-out");
       const lineEls = Array.from(outEl.children);
-      const tops = lineEls.map((el) => el.offsetTop);
-      const bottoms = lineEls.map((el) => el.offsetTop + el.offsetHeight);
+      const bottoms = [];
+      HEIGHTS.reduce((acc, h, i) => (bottoms[i] = acc + h), 0);
       const scrollFor = (i) => -Math.max(0, bottoms[i] - VIEW_H);
       lineEls.forEach((el, i) => {
         if (i >= BEFORE) gsap.set(el, { autoAlpha: 0 });
@@ -33,8 +35,8 @@
       hideScrolledOut(Math.max(0, BEFORE - 1), null);
       const typeLine = (i, at, dur) => {
         const cmd = lineEls[i].querySelector("[data-cmd]");
-        const w = cmd.scrollWidth;
         const chars = (cmd.textContent || "").length;
+        const w = Math.ceil(chars * CH_W);
         gsap.set(cmd, { width: 0 });
         tl.set(lineEls[i], { autoAlpha: 1 }, at);
         tl.to(cmd, { width: w, duration: dur, ease: `steps(${chars})` }, at);

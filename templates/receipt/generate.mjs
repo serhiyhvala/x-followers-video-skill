@@ -152,6 +152,7 @@ export default function generate(ctx) {
       paperW,
       paperLeft: Math.round((W - paperW) / 2),
       bodyH: v ? 470 : 160,
+      viewH: ctx.H - (v ? 470 : 160) + 222,
       bodyW: paperW + 100,
       bodyLeft: Math.round((W - paperW - 100) / 2),
       linesMarkup,

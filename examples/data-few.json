@@ -1,0 +1,47 @@
+{
+  "$comment": "Sample with a handful of followers and no analytics.",
+  "milestone": 2026,
+  "me": {
+    "name": "Ada Example",
+    "handle": "ada_example",
+    "avatar": null
+  },
+  "followers": [
+    {
+      "name": "Priya Raman",
+      "handle": "priyabuilds",
+      "avatar": null
+    },
+    {
+      "name": "Tomás Ferreira",
+      "handle": "tomasferreira_",
+      "avatar": null
+    },
+    {
+      "name": "Mina Okafor",
+      "handle": "minaokafor",
+      "avatar": null
+    },
+    {
+      "name": "Leo Castellano",
+      "handle": "leocastellano",
+      "avatar": null
+    },
+    {
+      "name": "Hana Sato 🌸",
+      "handle": "hanasato_dev",
+      "avatar": null
+    },
+    {
+      "name": "Dev Mehta",
+      "handle": "devmehta42",
+      "avatar": null
+    },
+    {
+      "name": "Astrid Lindqvist",
+      "handle": "astridlq",
+      "avatar": null
+    }
+  ],
+  "collectedAt": "2026-11-08"
+}

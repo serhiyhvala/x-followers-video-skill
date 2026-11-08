@@ -227,7 +227,7 @@ function playerHtml(v) {
 <div id="bar">
   <button id="play">Play</button><input id="seek" type="range" min="0" max="${v.duration}" step="${1 / v.fps}" value="0" />
   <span id="clock">0.00 / ${v.duration}s</span><button id="loop" title="Loop">Loop: off</button>
-  <span>Space play · ←/→ frame · R restart · H hide bar · ?rec hides it on load</span>
+  <span>Space play · ←/→ frame · R restart · H hide bar · ?rec hides it on load · ?t=seconds opens at a time</span>
 </div>
 ${templates}
 <script>
@@ -295,9 +295,10 @@ ${templates}
     else if (e.key === "r" || e.key === "R") show(0);
     else if (e.key === "h" || e.key === "H") document.getElementById("bar").classList.toggle("hide");
   });
-  if (location.search.indexOf("rec") !== -1) document.body.classList.add("rec");
+  var q = new URLSearchParams(location.search);
+  if (q.has("rec")) document.body.classList.add("rec");
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { show(t); });
-  show(0);
+  show(q.has("t") ? Number(q.get("t")) : 0);
   requestAnimationFrame(function (now) { last = now; tick(now); });
 })();
 </script>
