@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- x-followers-video-skill: a wall of follower cards; the last tile is the video. -->
+  <rect width="512" height="512" rx="104" fill="#0B0B0C"/>
+  <g fill="#FFFFFF">
+    <rect x="58" y="58" width="84" height="84" rx="20"/>
+    <rect x="162" y="58" width="84" height="84" rx="20"/>
+    <rect x="266" y="58" width="84" height="84" rx="20"/>
+    <rect x="370" y="58" width="84" height="84" rx="20"/>
+    <rect x="58" y="162" width="84" height="84" rx="20"/>
+    <rect x="162" y="162" width="84" height="84" rx="20"/>
+    <rect x="266" y="162" width="84" height="84" rx="20"/>
+    <rect x="370" y="162" width="84" height="84" rx="20"/>
+    <rect x="58" y="266" width="84" height="84" rx="20"/>
+    <rect x="162" y="266" width="84" height="84" rx="20"/>
+    <rect x="58" y="370" width="84" height="84" rx="20"/>
+    <rect x="162" y="370" width="84" height="84" rx="20"/>
+  </g>
+  <rect x="266" y="266" width="188" height="188" rx="36" fill="#FF5A1F"/>
+  <path d="M332 316 L418 360 L332 404 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round"/>
+</svg>

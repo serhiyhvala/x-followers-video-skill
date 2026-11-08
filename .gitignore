@@ -13,3 +13,5 @@ out/
 promo/assets/
 promo/renders/
 promo/check.json
+# Zip for marketplace uploads
+dist/

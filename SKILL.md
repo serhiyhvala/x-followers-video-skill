@@ -1,6 +1,17 @@
 ---
 name: x-followers-video-skill
 description: Turns an X (Twitter) follower milestone (100, 160, 1,000...) into a short, silent, polished MP4 from a data.json, with four visual templates (wall, mosaic, receipt, terminal) in 16:9 and 9:16, rendered by the pinned HyperFrames CLI through npx. Use when someone wants a follower-milestone video, a "thank you for N followers" clip, or a video of their newest followers and 7-day X analytics. No paid X API; works with a browser, a pasted console snippet, a CSV, or just the number.
+summary: "Turns your X (Twitter) follower milestone into a short, silent, polished MP4. Four templates (wall, mosaic, receipt, terminal) in 16:9 and 9:16, built from one data.json and rendered with HyperFrames. No paid X API: your browser, a pasted snippet, a CSV, or just the number."
+version: 1.0.0
+license: MIT
+docs_url: "https://github.com/serhiyhvala/x-followers-video-skill"
+tags: [x, twitter, followers, milestone, video, mp4, hyperframes, social-media, reels, shorts, tiktok, motion-graphics, thank-you]
+keywords: [follower milestone video, thank you followers, x analytics video, twitter followers mp4, 9:16 video, 16:9 video]
+use_cases:
+  - Thank your followers when you cross 100, 500, 1,000 or 10,000 on X with a 15 s video instead of a text post
+  - Turn your newest followers and 7-day X analytics into a clip for Reels, Shorts or TikTok (9:16)
+  - Give a creator, founder or community account a repeatable milestone post in one of four looks
+  - Produce the video with nothing but the number when no analytics or photos are available
 ---
 
 # X followers video
