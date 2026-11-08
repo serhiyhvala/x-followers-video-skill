@@ -6,12 +6,12 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 SRC="${1:-$ROOT/out/verify/data}"
 mkdir -p "$ROOT/docs"
 # One still per template at the frame that shows its medium best.
-declare -A AT=( [wall]=4.2 [mosaic]=3.2 [receipt]=7.6 [terminal]=13.4 )
+at() { case "$1" in wall) echo 4.2;; mosaic) echo 3.2;; receipt) echo 8.6;; terminal) echo 13.4;; esac; }
 for t in wall mosaic receipt terminal; do
   for a in 16x9 9x16; do
     mp4="$SRC/$t-$a/renders/$t-$a.mp4"
     [ -f "$mp4" ] || { echo "missing $mp4"; continue; }
-    ffmpeg -v error -y -ss "${AT[$t]}" -i "$mp4" -frames:v 1 -q:v 3 "$ROOT/docs/$t-$a.jpg"
+    ffmpeg -v error -y -ss "$(at $t)" -i "$mp4" -frames:v 1 -q:v 3 "$ROOT/docs/$t-$a.jpg"
   done
 done
 # A small looping GIF of the wall (16:9), 15 fps, 640 px wide, two-pass palette.
