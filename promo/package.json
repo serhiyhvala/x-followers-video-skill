@@ -1,0 +1,10 @@
+{
+  "name": "x-followers-video-skill-promo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.9.23 preview",
+    "check": "npx --yes hyperframes@0.9.23 check",
+    "render": "npx --yes hyperframes@0.9.23 render --quality delivery --output renders/x-followers-video-skill-promo.mp4"
+  }
+}

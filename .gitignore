@@ -10,3 +10,6 @@ data.json
 node_modules/
 .DS_Store
 out/
+promo/assets/
+promo/renders/
+promo/check.json

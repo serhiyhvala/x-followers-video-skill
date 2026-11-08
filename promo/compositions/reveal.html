@@ -1,0 +1,92 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffffff);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
+    }
+    #rv-mark {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 330px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 112px;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    #rv-mark span { display: inline-block; }
+    #rv-mark .acc { color: var(--color-accent, #ff5a1f); }
+    #rv-sub {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 470px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 40px;
+      color: var(--color-muted, #6e6e73);
+      white-space: nowrap;
+    }
+    /* data.json panel: the number the viewer just saw, as the only required field. */
+    #rv-json {
+      position: absolute;
+      left: 610px;
+      top: 600px;
+      width: 700px;
+      padding: 36px 48px;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid transparent;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.06),
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        0 24px 50px -16px rgba(0, 0, 0, 0.18);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 38px;
+      line-height: 56px;
+      white-space: pre;
+      color: var(--color-ink, #0b0b0c);
+    }
+    #rv-json .k { color: var(--color-muted, #6e6e73); }
+    #rv-json .n { color: var(--color-accent, #ff5a1f); font-weight: 700; }
+    #rv-json .rv-row { display: block; }
+    #rv-file {
+      position: absolute;
+      left: 610px;
+      top: 556px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      color: var(--color-muted, #6e6e73);
+    }
+  </style>
+
+  <div id="root" data-composition-id="reveal" data-width="1920" data-height="1080">
+    <h1 id="rv-mark"><span>x-</span><span>followers-</span><span>video-</span><span class="acc">skill</span></h1>
+    <p id="rv-sub">data.json in, video out.</p>
+    <p id="rv-file">data.json</p>
+    <div id="rv-json"><span class="rv-row">{</span><span class="rv-row">  <span class="k">"milestone"</span>: <span class="n">223</span>,</span><span class="rv-row">  <span class="k">"followers"</span>: [ <span class="k">60 people</span> ],</span><span class="rv-row">  <span class="k">"analytics"</span>: { <span class="k">7 days</span> }</span><span class="rv-row">}</span></div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // The wordmark assembles from its parts, the accent word last; then it is dead still.
+      tl.fromTo("#rv-mark span", { opacity: 0, x: -30, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.3, ease: "expo.out", stagger: 0.08 }, 0);
+      tl.fromTo("#rv-sub", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.5);
+      // The panel rises; rows print top to bottom; the number is the first thing to land.
+      tl.fromTo("#rv-file", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.8);
+      tl.fromTo("#rv-json", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.8);
+      tl.fromTo("#rv-json .rv-row", { opacity: 0 }, { opacity: 1, duration: 0.08, stagger: 0.12 }, 0.95);
+      tl.fromTo("#rv-json .n", { scale: 1.4, transformOrigin: "0% 50%" }, { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 1.1);
+      // Exit: everything drops into depth; the desktop world arrives on the same drop.
+      tl.to(["#rv-mark", "#rv-sub", "#rv-file", "#rv-json"], { scale: 0.92, opacity: 0, filter: "blur(10px)", duration: 0.28, ease: "power3.in", transformOrigin: "50% 50%" }, 2.5);
+      window.__timelines["reveal"] = tl;
+    })();
+  </script>
+</template>

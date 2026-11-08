@@ -1,0 +1,53 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffffff);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
+    }
+    #cl-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 330px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 136px;
+      letter-spacing: -0.03em;
+      line-height: 1.04;
+      white-space: nowrap;
+    }
+    #cl-line span { display: inline-block; }
+    #cl-line .acc { color: var(--color-accent, #ff5a1f); }
+    #cl-sub {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 660px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 40px;
+      color: var(--color-muted, #6e6e73);
+      white-space: nowrap;
+    }
+  </style>
+
+  <div id="root" data-composition-id="claim" data-width="1920" data-height="1080">
+    <p id="cl-line"><span>Every</span> <span>follower</span><br /><span class="acc">sees</span> <span>themselves.</span></p>
+    <p id="cl-sub">Four templates · 16:9 and 9:16</p>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // Arrives on the hard cut from the terminal film: words from light grey to ink, no position change.
+      tl.fromTo("#cl-line span:not(.acc)", { color: "#d8d8dc" }, { color: "#0b0b0c", duration: 0.2, ease: "power2.out", stagger: 0.09 }, 0.05);
+      tl.fromTo("#cl-line .acc", { color: "#d8d8dc" }, { color: "#ff5a1f", duration: 0.2, ease: "power2.out" }, 0.23);
+      tl.fromTo("#cl-sub", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.4);
+      window.__timelines["claim"] = tl;
+    })();
+  </script>
+</template>

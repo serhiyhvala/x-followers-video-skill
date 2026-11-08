@@ -1,0 +1,182 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-desk, #d9dde3);
+      color: #e6edf3;
+      font-family: "JetBrains Mono", monospace;
+    }
+    #tm-win {
+      position: absolute;
+      left: 120px;
+      top: 90px;
+      width: 1680px;
+      height: 900px;
+      border-radius: 18px;
+      background: var(--color-term, #14171c);
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 30px 70px -20px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      transform-origin: 50% 50%;
+    }
+    #tm-bar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: rgba(230, 237, 243, 0.6);
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    #tm-view {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 96px;
+      height: 748px;
+      overflow: hidden;
+    }
+    #tm-out { position: absolute; left: 0; right: 0; top: 0; }
+    .tl {
+      height: 44px;
+      line-height: 44px;
+      font-size: 30px;
+      white-space: pre;
+      display: flex;
+      align-items: center;
+    }
+    .dim { color: rgba(230, 237, 243, 0.55); }
+    .green { color: #3fb950; }
+    .blue { color: #79c0ff; }
+    .yellow { color: #e3b341; }
+    .cmd { display: inline-block; overflow: hidden; vertical-align: bottom; white-space: pre; }
+    .cur { display: inline-block; width: 0.6em; height: 1.1em; margin-left: 2px; background: #e6edf3; vertical-align: text-bottom; }
+    .bar-track { display: inline-block; width: 480px; height: 14px; border-radius: 7px; background: rgba(255,255,255,0.12); margin: 0 16px; vertical-align: middle; overflow: hidden; }
+    .bar-fill { display: block; height: 100%; width: 100%; background: #3fb950; transform-origin: 0 50%; }
+
+    /* The real followers page, beside the window during collect. */
+    #tm-shot {
+      position: absolute;
+      left: 1120px;
+      top: 150px;
+      width: 760px;
+      height: 475px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.12),
+        0 30px 60px -20px rgba(0, 0, 0, 0.4);
+      background: #fff;
+    }
+    #tm-shot img { display: block; width: 760px; height: 475px; }
+    #tm-scan {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 55px;
+      height: 54px;
+      background: rgba(255, 90, 31, 0.18);
+      border-left: 6px solid var(--color-accent, #ff5a1f);
+    }
+    #tm-shot-label {
+      position: absolute;
+      left: 1120px;
+      top: 640px;
+      font-family: Inter, sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      color: #3b4048;
+    }
+  </style>
+
+  <div id="root" data-composition-id="term" data-width="1920" data-height="1080">
+    <div id="tm-win" data-layout-allow-overflow>
+      <div id="tm-bar">x-followers-video-skill — zsh</div>
+      <div id="tm-view">
+        <div id="tm-out">
+          <div class="tl" id="l0"><span class="dim">~/x</span> <span class="green">$</span> <span class="cmd" data-cmd>npx skills add serhiyhvala/x-followers-video-skill</span><span class="cur"></span></div>
+          <div class="tl" id="l1"><span class="yellow">●</span>  Skill: x-followers-video-skill</div>
+          <div class="tl" id="l2"><span class="dim">   Turns an X follower milestone into a short, silent, polished MP4 …</span></div>
+          <div class="tl" id="l3"><span class="green">✓</span> x-followers-video-skill <span class="dim">(copied) → ./.claude/skills/x-followers-video-skill</span></div>
+          <div class="tl" id="l4"><span class="dim">~/x</span> <span class="green">$</span> <span class="cmd" data-cmd><span class="dim"># on x.com: paste scripts/collect-x.js, once per page</span></span><span class="cur"></span></div>
+          <div class="tl" id="l5"><span class="dim">→</span> collected profile <span class="yellow">223</span></div>
+          <div class="tl" id="l6"><span class="dim">→</span> collected followers <span class="yellow">60 people</span></div>
+          <div class="tl" id="l7"><span class="dim">→</span> collected analytics <span class="yellow">7D</span> <span class="dim">· data.json copied</span></div>
+          <div class="tl" id="l8"><span class="dim">~/x</span> <span class="green">$</span> <span class="cmd" data-cmd>node scripts/build.mjs --data data.json --template wall --aspect 16x9</span><span class="cur"></span></div>
+          <div class="tl" id="l9">built <span class="blue">wall-16x9</span> <span class="dim">-> out/wall-16x9</span></div>
+          <div class="tl" id="l10"><span class="dim">  1920x1080 · 16.4s · scenes: intro@0, stats@7, finale@11.4</span></div>
+          <div class="tl" id="l11"><span class="dim">~/x</span> <span class="green">$</span> <span class="cmd" data-cmd>npm run render</span><span class="cur"></span></div>
+          <div class="tl" id="l12"><span class="dim">  rendering</span><span class="bar-track"><span class="bar-fill" id="tm-fill"></span></span><span class="dim" id="tm-pct">0%</span></div>
+          <div class="tl" id="l13"><span class="dim">  rendered in 19.2s</span></div>
+          <div class="tl" id="l14"><span class="green">✔</span> <span class="blue" id="tm-file">renders/wall-16x9.mp4</span></div>
+        </div>
+      </div>
+    </div>
+    <div id="tm-shot" data-layout-allow-overflow data-motion-blur="off">
+      <img src="assets/followers.png" alt="" />
+      <div id="tm-scan"></div>
+    </div>
+    <p id="tm-shot-label">x.com/serhiyhvala/followers · read in your own browser</p>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const lines = Array.from(document.querySelectorAll("#tm-out .tl"));
+      const CH = 30 * 0.6;
+      lines.forEach((el, i) => { if (i > 0) gsap.set(el, { autoAlpha: 0 }); });
+      gsap.set("#tm-shot", { x: 900, opacity: 0 });
+      gsap.set("#tm-shot-label", { opacity: 0 });
+
+      // Typing: width in steps of one character; the cursor rides the right edge and hides when output starts.
+      const type = (i, at) => {
+        const cmd = lines[i].querySelector("[data-cmd]");
+        const n = (cmd.textContent || "").length;
+        gsap.set(cmd, { width: 0 });
+        tl.set(lines[i], { autoAlpha: 1 }, at);
+        tl.to(cmd, { width: Math.ceil(n * CH), duration: Math.max(0.3, n * 0.03), ease: `steps(${n})` }, at);
+        return at + Math.max(0.3, n * 0.03) + 0.35; // Enter
+      };
+      const show = (i, at) => {
+        tl.set(lines[i], { autoAlpha: 1 }, at);
+        const prevCur = lines[i - 1] && lines[i - 1].querySelector(".cur");
+        if (prevCur) tl.set(prevCur, { autoAlpha: 0 }, at);
+      };
+
+      // The window arrives on the drop from the reveal scene.
+      tl.fromTo("#tm-win", { scale: 1.06, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 0);
+
+      // 1. install (the first command is already typed at frame 0; Enter at 0.55)
+      let t = 0.55;
+      show(1, t); show(2, t + 0.25); show(3, t + 0.9);
+      // 2. collect: the followers page slides in beside a narrower window
+      t = type(4, 2.2);
+      tl.to("#tm-win", { width: 980, duration: 0.5, ease: "expo.out" }, 2.2);
+      tl.to("#tm-shot", { x: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 2.4);
+      tl.fromTo("#tm-shot-label", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 2.9);
+      tl.fromTo("#tm-scan", { y: 0 }, { y: 360, duration: 1.6, ease: "steps(7)" }, 3.0);
+      show(5, t + 0.3); show(6, t + 1.0); show(7, t + 1.7);
+      // 3. build: the page leaves, the window widens again
+      tl.to("#tm-shot", { x: 900, opacity: 0, duration: 0.35, ease: "power3.in" }, 6.3);
+      tl.to("#tm-shot-label", { opacity: 0, duration: 0.2 }, 6.3);
+      tl.to("#tm-win", { width: 1680, duration: 0.5, ease: "expo.out" }, 6.55);
+      t = type(8, 6.9);
+      show(9, t); show(10, t + 0.15);
+      // 4. render: a progress bar fills, the file name lands
+      t = type(11, t + 0.9);
+      show(12, t);
+      const pct = { n: 0 };
+      const pctEl = document.getElementById("tm-pct");
+      tl.fromTo("#tm-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: "power1.inOut" }, t);
+      tl.fromTo(pct, { n: 0 }, { n: 100, duration: 1.4, ease: "power1.inOut", onUpdate: () => (pctEl.textContent = Math.round(pct.n) + "%") }, t);
+      show(13, t + 1.5); show(14, t + 1.7);
+      tl.fromTo("#tm-file", { color: "#79c0ff" }, { color: "#ffffff", duration: 0.2, ease: "power2.out" }, t + 2.3);
+
+      window.__timelines["term"] = tl;
+    })();
+  </script>
+</template>

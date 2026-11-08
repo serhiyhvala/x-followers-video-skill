@@ -1,0 +1,88 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffffff);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
+    }
+    #en-mark {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 300px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 96px;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    #en-mark .acc { color: var(--color-accent, #ff5a1f); }
+    /* The install command: a real line to copy, in a soft panel; the cursor clicks it and it flashes. */
+    #en-cmd {
+      position: absolute;
+      left: 50%;
+      top: 470px;
+      transform: translateX(-50%);
+      padding: 30px 48px;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid transparent;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.06),
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        0 24px 50px -16px rgba(0, 0, 0, 0.18);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 40px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    #en-cmd .dim { color: var(--color-muted, #6e6e73); }
+    #en-url {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 640px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 34px;
+      color: var(--color-muted, #6e6e73);
+      white-space: nowrap;
+    }
+    #en-cursor {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+    }
+  </style>
+
+  <div id="root" data-composition-id="end" data-width="1920" data-height="1080">
+    <h1 id="en-mark">x-followers-video-<span class="acc">skill</span></h1>
+    <div id="en-cmd-wrap" data-layout-allow-overflow><div id="en-cmd"><span class="dim">$</span> npx skills add serhiyhvala/x-followers-video-skill</div></div>
+    <p id="en-url">github.com/serhiyhvala/x-followers-video-skill</p>
+    <svg id="en-cursor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 8.5-6.2 1.6L9 20z" fill="#0b0b0c" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" /></svg>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // The mark lands with weight, once.
+      tl.fromTo("#en-mark", { opacity: 0, scale: 1.25, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "expo.out", transformOrigin: "50% 50%" }, 0);
+      tl.fromTo("#en-cmd-wrap", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, 0.25);
+      tl.fromTo("#en-url", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.45);
+      // The cursor comes in from the bottom right and clicks the command; it flashes accent and settles.
+      tl.fromTo("#en-cursor", { x: 2000, y: 1100 }, { x: 1180, y: 530, duration: 0.55, ease: "power3.out" }, 0.5);
+      tl.to("#en-cursor", { scale: 0.86, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "20% 15%" }, 1.1);
+      tl.fromTo("#en-cmd", { scale: 1, backgroundColor: "#ffffff", color: "#0b0b0c" }, { scale: 0.96, backgroundColor: "#ff5a1f", color: "#ffffff", duration: 0.1, ease: "power2.out", transformOrigin: "50% 50%" }, 1.1);
+      tl.to("#en-cmd", { scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 1.2);
+      tl.to("#en-cmd .dim", { color: "#ffd8c8", duration: 0.1 }, 1.1);
+      window.__timelines["end"] = tl;
+    })();
+  </script>
+</template>
