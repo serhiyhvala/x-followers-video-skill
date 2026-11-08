@@ -1,0 +1,24 @@
+<template>
+  <style>
+{{include:terminal.css}}
+    #stream-stage {
+      position: absolute;
+      inset: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="stream" data-width="{{W}}" data-height="{{H}}">
+    <div id="stream-stage" class="{{rootClass}}">
+{{include:window.html}}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+{{include:term.js}}
+      // Frame 0: the command is typed and waits; Enter lands at 0.5 s and the log streams.
+      window.__timelines["stream"] = tl;
+    })();
+  </script>
+</template>

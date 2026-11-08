@@ -1,0 +1,55 @@
+<template>
+  <style>
+{{include:terminal.css}}
+    #fin-stage {
+      position: absolute;
+      inset: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="finale" data-width="{{W}}" data-height="{{H}}">
+    <div id="fin-stage" class="{{rootClass}}">
+{{include:window.html}}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+{{include:term.js}}
+      typeLine({{typedLine}}, TIMES[{{typedLine}}], {{typedDur}});
+      tl.to(outEl, { y: scrollFor({{typedLine}}), duration: 0.08, ease: "power1.out" }, TIMES[{{typedLine}}]);
+      hideScrolledOut({{typedLine}}, TIMES[{{typedLine}}]);
+
+      // The block number draws row by row, then redraws up to the milestone; each redraw is a flip.
+      const BLOCK = {{blockIndex}};
+      const BLOCK_AT = {{blockAt}};
+      const REDRAW = {{redrawJson}};
+      const layers = Array.from(document.querySelectorAll("#t-block .t-layer"));
+      tl.set(lineEls[BLOCK], { autoAlpha: 1 }, BLOCK_AT);
+      cursorOff(BLOCK, BLOCK_AT);
+      tl.to(outEl, { y: scrollFor(BLOCK), duration: 0.08, ease: "power1.out" }, BLOCK_AT);
+      hideScrolledOut(BLOCK, BLOCK_AT);
+      tl.set(layers[0], { opacity: 1 }, BLOCK_AT);
+      tl.fromTo(layers[0].children, { opacity: 0 }, { opacity: 1, duration: 0.01, stagger: 0.07 }, BLOCK_AT);
+      REDRAW.forEach((at, k) => {
+        tl.set(layers[k], { opacity: 0 }, at);
+        tl.set(layers[k + 1], { opacity: 1 }, at);
+      });
+      const landed = {{landedAt}};
+      tl.fromTo("#t-block", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.03, duration: 0.1, ease: "power2.out" }, landed);
+      tl.to("#t-block", { scale: 1, duration: 0.45, ease: "back.out(1.6)" }, landed + 0.1);
+
+      // The comment types in; the prompt returns.
+      const COMMENT = {{commentIndex}};
+      const c = lineEls[COMMENT].firstElementChild;
+      c.setAttribute("data-cmd", "");
+      c.classList.add("t-cmd");
+      typeLine(COMMENT, TIMES[COMMENT], TIMES[COMMENT + 1] - TIMES[COMMENT] - 0.2);
+      tl.to(outEl, { y: scrollFor(COMMENT), duration: 0.08, ease: "power1.out" }, TIMES[COMMENT]);
+      hideScrolledOut(COMMENT, TIMES[COMMENT]);
+
+      window.__timelines["finale"] = tl;
+    })();
+  </script>
+</template>

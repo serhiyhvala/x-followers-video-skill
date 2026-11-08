@@ -1,0 +1,93 @@
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #d9dde3);
+      font-family: "JetBrains Mono", "Noto Sans JP", monospace;
+      color: var(--color-fg, #e6edf3);
+    }
+    #t-win {
+      position: absolute;
+      left: {{winLeft}}px;
+      top: {{winTop}}px;
+      width: {{winW}}px;
+      height: {{winH}}px;
+      border-radius: 18px;
+      background: var(--color-term, #14171c);
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 30px 70px -20px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+    #t-bar {
+      height: {{bar}}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: rgba(230, 237, 243, 0.6);
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    #t-view {
+      position: absolute;
+      left: {{pad}}px;
+      right: {{pad}}px;
+      top: calc({{bar}}px + {{pad}}px);
+      height: {{visibleH}}px;
+      overflow: hidden;
+    }
+    #t-out {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+    .t-line {
+      height: {{line}}px;
+      line-height: {{line}}px;
+      font-size: {{font}}px;
+      white-space: pre;
+      display: flex;
+      align-items: center;
+    }
+    .t-dim { color: rgba(230, 237, 243, 0.55); }
+    .t-green { color: #3fb950; }
+    .t-blue { color: #79c0ff; }
+    .t-yellow { color: var(--color-accent, #e3b341); }
+    .t-red { color: #ff7b72; }
+    .t-cmd {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      white-space: pre;
+    }
+    .t-cursor {
+      display: inline-block;
+      width: 0.6em;
+      height: 1.1em;
+      margin-left: 2px;
+      background: var(--color-fg, #e6edf3);
+      vertical-align: text-bottom;
+    }
+    .t-block {
+      position: relative;
+      display: block;
+      height: 100%;
+      font-size: {{blockFont}}px;
+      line-height: {{blockLine}}px;
+      color: var(--color-accent, #e3b341);
+    }
+    .t-layer {
+      position: absolute;
+      left: 0;
+      top: 10px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+    }
+    .t-brow {
+      display: block;
+      white-space: pre;
+      height: {{blockLine}}px;
+    }

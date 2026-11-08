@@ -1,0 +1,7 @@
+{
+  "title": "Terminal",
+  "description": "Build-in-public: a terminal window streams the newest followers like a log, prints 7-day analytics with sparklines, then draws the milestone in block glyphs that redraw up to the number.",
+  "fps": 30,
+  "accent": "#E3B341",
+  "font": "JetBrains Mono"
+}
