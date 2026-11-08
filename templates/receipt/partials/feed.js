@@ -15,7 +15,8 @@
         STRIPS.forEach((s, pos) => {
           const strip = document.getElementById("rdg-" + pos);
           gsap.set(strip, { yPercent: -(100 * (s.length - 1)) / s.length });
-          gsap.set(Array.from(strip.children).slice(0, -1), { autoAlpha: 0 }); // glyphs that rolled out of the slot
+          const rolledOut = Array.from(strip.children).slice(0, -1);
+          if (rolledOut.length) gsap.set(rolledOut, { autoAlpha: 0 }); // glyphs that rolled out of the slot
         });
       }
       // Lines that have risen above the frame are hidden, so nothing is sampled where nothing shows.

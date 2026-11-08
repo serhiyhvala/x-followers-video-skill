@@ -150,7 +150,7 @@ export default function generate(ctx) {
       font,
       blockFont,
       blockLine,
-      visibleH: win.height - bar - 2 * pad,
+      visibleH: visibleRows * line,
       heightsJson: JSON.stringify(heights),
       title: `followers — ${cols}×${visibleRows}`,
     },

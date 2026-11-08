@@ -213,8 +213,7 @@ function playerHtml(v) {
   html, body { margin: 0; height: 100%; background: #1a1a1a; overflow: hidden; font-family: Inter, system-ui, sans-serif; }
   #stage-wrap { position: absolute; inset: 0; overflow: hidden; }
   #stage { position: absolute; left: 50%; top: 50%; width: ${v.W}px; height: ${v.H}px; margin: -${v.H / 2}px 0 0 -${v.W / 2}px; overflow: hidden; background: #fff; transform-origin: 50% 50%; }
-  .xmv-host { position: absolute; inset: 0; display: none; }
-  .xmv-host.on { display: block; }
+  .xmv-host { position: absolute; inset: 0; }
   #bar { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;
          background: rgba(0,0,0,.72); color: #fff; padding: 10px 14px; border-radius: 14px; font-size: 14px; transition: opacity .25s; }
   #bar.hide, body.rec #bar { opacity: 0; pointer-events: none; }
@@ -236,28 +235,37 @@ ${templates}
   window.__timelines = window.__timelines || {};
   window.__hyperframes = window.__hyperframes || { getVariables: function () { return {}; } };
   var stage = document.getElementById("stage");
-  SCENES.forEach(function (s) {
+  // One scene is in the DOM at a time, as in HyperFrames, so scene ids and #root never collide.
+  var mounted = null, mountedStyle = null;
+  function mount(s) {
+    if (mounted === s.id) return;
+    unmount();
     var tpl = document.querySelector('template[data-scene="' + s.id + '"]');
     var host = document.createElement("div");
-    host.className = "xmv-host"; host.id = "host-" + s.id;
+    host.className = "xmv-host on"; host.id = "host-" + s.id;
     stage.appendChild(host);
-    var frag = tpl.content;
-    Array.prototype.slice.call(frag.children).forEach(function (node) {
-      if (node.tagName === "STYLE") {
-        var st = document.createElement("style");
-        st.textContent = node.textContent.replace(/#root\\b/g, "#" + s.id + "-root");
-        document.head.appendChild(st);
-      } else if (node.tagName === "SCRIPT") {
-        var sc = document.createElement("script");
-        sc.textContent = "(function(){\\n" + node.textContent + "\\n})();";
-        host.appendChild(sc);
-      } else {
-        var el = document.importNode(node, true);
-        if (el.id === "root") el.id = s.id + "-root";
-        host.appendChild(el);
-      }
+    mountedStyle = document.createElement("style");
+    Array.prototype.slice.call(tpl.content.children).forEach(function (node) {
+      if (node.tagName === "STYLE") mountedStyle.textContent += node.textContent;
+      else if (node.tagName !== "SCRIPT") host.appendChild(document.importNode(node, true));
     });
-  });
+    document.head.appendChild(mountedStyle);
+    Array.prototype.slice.call(tpl.content.children).forEach(function (node) {
+      if (node.tagName !== "SCRIPT") return;
+      var sc = document.createElement("script");
+      sc.textContent = "(function(){\\n" + node.textContent + "\\n})();";
+      host.appendChild(sc);
+    });
+    mounted = s.id;
+  }
+  function unmount() {
+    if (!mounted) return;
+    var host = document.getElementById("host-" + mounted);
+    if (host) host.remove();
+    if (mountedStyle) mountedStyle.remove();
+    delete window.__timelines[mounted];
+    mounted = null; mountedStyle = null;
+  }
   function fit() {
     var k = Math.min(innerWidth / ${v.W}, innerHeight / ${v.H});
     stage.style.transform = "scale(" + k + ")";
@@ -267,12 +275,12 @@ ${templates}
   var seek = document.getElementById("seek"), clock = document.getElementById("clock"), playBtn = document.getElementById("play");
   function show(time) {
     t = Math.max(0, Math.min(DURATION, time));
-    SCENES.forEach(function (s) {
-      var on = t >= s.start && t < s.start + s.duration;
-      document.getElementById("host-" + s.id).classList.toggle("on", on);
-      var tl = window.__timelines[s.id];
-      if (on && tl) tl.time(Math.min(t - s.start, tl.duration()), true);
-    });
+    var active = null;
+    SCENES.forEach(function (s) { if (t >= s.start && t < s.start + s.duration) active = s; });
+    if (!active) active = SCENES[SCENES.length - 1];
+    mount(active);
+    var tl = window.__timelines[active.id];
+    if (tl) tl.time(Math.min(Math.max(0, t - active.start), tl.duration()), true);
     seek.value = t; clock.textContent = t.toFixed(2) + " / " + DURATION + "s";
   }
   function tick(now) {

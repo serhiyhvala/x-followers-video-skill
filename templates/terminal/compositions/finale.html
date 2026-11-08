@@ -49,6 +49,7 @@
       tl.to(outEl, { y: scrollFor(COMMENT), duration: 0.08, ease: "power1.out" }, TIMES[COMMENT]);
       hideScrolledOut(COMMENT, TIMES[COMMENT]);
 
+      flushHides();
       window.__timelines["finale"] = tl;
     })();
   </script>

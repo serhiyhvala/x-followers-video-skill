@@ -20,6 +20,7 @@
       typeLine({{typedLine}}, TIMES[{{typedLine}}], {{typedDur}});
       tl.to(outEl, { y: scrollFor({{typedLine}}), duration: 0.08, ease: "power1.out" }, TIMES[{{typedLine}}]);
       hideScrolledOut({{typedLine}}, TIMES[{{typedLine}}]);
+      flushHides();
       window.__timelines["stats"] = tl;
     })();
   </script>

@@ -7,9 +7,14 @@
       const CH_W = {{font}} * 0.6; // JetBrains Mono advance width; no layout reads here (the scene may not be laid out yet)
       const outEl = document.getElementById("t-out");
       const lineEls = Array.from(outEl.children);
-      const bottoms = [];
-      HEIGHTS.reduce((acc, h, i) => (bottoms[i] = acc + h), 0);
-      const scrollFor = (i) => -Math.max(0, bottoms[i] - VIEW_H);
+      const tops = [], bottoms = [];
+      HEIGHTS.reduce((acc, h, i) => ((tops[i] = acc), (bottoms[i] = acc + h)), 0);
+      // Scroll by whole lines, like a terminal: the first visible line starts at the top of the view.
+      const scrollFor = (i) => {
+        let k = 0;
+        while (k < i && bottoms[i] - tops[k] > VIEW_H) k++;
+        return -tops[k];
+      };
       lineEls.forEach((el, i) => {
         if (i >= BEFORE) gsap.set(el, { autoAlpha: 0 });
         const cur = el.querySelector(".t-cursor");
@@ -22,15 +27,18 @@
       };
       gsap.set(outEl, { y: scrollFor(Math.max(0, BEFORE - 1)) });
       // A line that has scrolled out of the view is hidden, so nothing is sampled where nothing shows.
-      const hidden = new Set();
+      // Requests are collected and the earliest time per line wins, whatever order the scene schedules them in.
+      const hideAt = new Map();
       const hideScrolledOut = (i, at) => {
         const y = scrollFor(i);
         for (let j = 0; j < i; j++) {
-          if (hidden.has(j) || bottoms[j] + y > 0) continue;
-          hidden.add(j);
-          if (at == null) gsap.set(lineEls[j], { autoAlpha: 0 });
-          else tl.set(lineEls[j], { autoAlpha: 0 }, at + 0.08);
+          if (bottoms[j] + y > 0) continue;
+          const t = at == null ? -1 : at + 0.08;
+          if (!hideAt.has(j) || t < hideAt.get(j)) hideAt.set(j, t);
         }
+      };
+      const flushHides = () => {
+        hideAt.forEach((t, j) => (t < 0 ? gsap.set(lineEls[j], { autoAlpha: 0 }) : tl.set(lineEls[j], { autoAlpha: 0 }, t)));
       };
       hideScrolledOut(Math.max(0, BEFORE - 1), null);
       const typeLine = (i, at, dur) => {

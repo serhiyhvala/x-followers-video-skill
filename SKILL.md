@@ -61,8 +61,9 @@ the build wrote. Every number on screen comes from `data.json`; the only require
   mid-word. Check the review sheets anyway for emoji or CJK names.
 - **Studio preview crashes (React error #185)** when files change under it: reload the page.
 - **`check` warnings to keep**: `film_silent` (silent by design), `line_unread` on streaming follower
-  lines in `receipt` and `terminal` (a log scrolls; the three newest and the number hold), `contrast_aa_failure`
-  sampled on a line mid-print (the reveal passes through low contrast).
+  lines in `receipt` and `terminal` (a log scrolls; the three newest and the number hold),
+  `composition_file_too_large` on the wall's intro (60 static cards). Anything else is a regression:
+  `node scripts/test/verify-all.mjs` prints the expected set per template.
 
 ## Privacy
 
