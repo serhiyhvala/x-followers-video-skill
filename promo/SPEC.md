@@ -1,6 +1,7 @@
 GOAL:    a builder on X sees a real result in the first ten seconds and copies the install command at the end.
-OUTPUT:  HyperFrames, 1920x1080, 30 fps, silent by request (no <audio>); type and motion carry it.
-TIME:    38.0 s x 30 = 1140 frames. No music, so cuts land on motion.
+OUTPUT:  HyperFrames, 1920x1080, 30 fps. Music: "Smart Moves" by kissan4 (Pixabay), 120 BPM, from 0.4 s into the track so its
+         second section lands on the payoff at 23.4 s; 0.85 gain, 0.4 s fade-in, 1.6 s fade-out under the end card. No voice, no sfx.
+TIME:    39.0 s x 30 = 1170 frames. 120 BPM = 15 frames a beat; the zoom-through starts on a beat.
 LOOK:    home ground #FFFFFF flat; ink #0B0B0C; muted #6E6E73; one accent #FF5A1F (the follower count, one word per claim,
          the end-card command). Display Inter 900 at 7-12% of the frame height, tracking -0.03em, tabular numbers; body Inter 600.
          Worlds: (1) the real x.com profile as a screenshot on white, pushed to 1.6x; (2) a chat with the agent: desktop #D9DDE3,
