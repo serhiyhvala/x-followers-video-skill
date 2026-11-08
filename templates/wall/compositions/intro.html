@@ -1,0 +1,384 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffffff);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, "Noto Sans JP", sans-serif;
+    }
+    #intro-stage,
+    #intro-left {
+      position: absolute;
+      inset: 0;
+    }
+    #intro-left {
+      z-index: 4;
+    }
+
+    /* Hook: who, the count, what */
+    #intro-me {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: {{meTop}}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      z-index: 4;
+      white-space: nowrap;
+    }
+    #intro-me[hidden] {
+      display: none;
+    }
+    #intro-me img {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      object-fit: cover;
+      outline: 1px solid rgba(0, 0, 0, 0.1);
+      outline-offset: -1px;
+    }
+    #intro-me b {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    #intro-me span {
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--color-muted, #6e6e73);
+    }
+    #intro-kicker,
+    #intro-unit {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      z-index: 4;
+    }
+    #intro-kicker {
+      top: {{kickerTop}}px;
+      color: var(--color-muted, #6e6e73);
+    }
+    #intro-unit {
+      top: {{unitTop}}px;
+    }
+    #intro-num {
+      position: absolute;
+      left: {{numLeft}}px;
+      top: {{numTop}}px;
+      display: flex;
+      z-index: 4;
+      font-size: {{font}}px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: var(--color-ink, #0b0b0c);
+      transform-origin: 0% 0%;
+    }
+    /* Each slot is wider and taller than its glyph, so nothing is ever clipped. */
+    .dg {
+      display: block;
+      width: {{slotW}}px;
+      height: {{slotH}}px;
+      margin-right: -14px;
+      overflow: hidden;
+    }
+    .dg:last-child {
+      margin-right: 0;
+    }
+    .dg-strip {
+      display: flex;
+      flex-direction: column;
+    }
+    .dg-strip span {
+      display: block;
+      height: {{slotH}}px;
+      line-height: {{slotH}}px;
+      text-align: center;
+    }
+
+    /* Panel after the carry */
+    #intro-head {
+      position: absolute;
+      left: 140px;
+      top: {{headTop}}px;
+      z-index: 4;
+      font-size: 80px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+    }
+    #intro-head span {
+      display: inline-block;
+    }
+    #intro-sub {
+      position: absolute;
+      left: 140px;
+      top: {{subTop}}px;
+      z-index: 4;
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--color-muted, #6e6e73);
+      white-space: nowrap;
+    }
+    .v #intro-head,
+    .v #intro-sub {
+      left: 80px;
+    }
+
+    /* Follower wall */
+    #intro-wall {
+      position: absolute;
+      left: 776px;
+      top: 0;
+      width: 1100px;
+      height: 1080px;
+      perspective: 2400px;
+      z-index: 1;
+      opacity: 0;
+    }
+    #intro-plane {
+      position: absolute;
+      left: 10px;
+      top: 0;
+      width: 1084px;
+      height: 1080px;
+      transform: rotateY(-12deg);
+      transform-origin: 0% 50%;
+    }
+    .wall-col {
+      position: absolute;
+      top: -220px;
+      width: 348px;
+    }
+    #wall-col-1 { left: 0; }
+    #wall-col-2 { left: 368px; }
+    #wall-col-3 { left: 736px; }
+    .wall-run {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .intro-fade {
+      position: absolute;
+      left: 756px;
+      right: 0;
+      height: 190px;
+      z-index: 2;
+    }
+    #intro-fade-top {
+      top: 0;
+      background: linear-gradient(var(--color-ground, #ffffff) 20%, rgba(255, 255, 255, 0));
+    }
+    #intro-fade-bottom {
+      bottom: 0;
+      background: linear-gradient(rgba(255, 255, 255, 0), var(--color-ground, #ffffff) 80%);
+    }
+    .v #intro-wall {
+      left: 0;
+      top: 660px;
+      width: 1080px;
+      height: 1260px;
+      overflow: hidden;
+    }
+    .v #intro-plane {
+      left: 14px;
+      width: 1052px;
+      height: 1260px;
+      transform: rotateY(-7deg);
+      transform-origin: 50% 50%;
+    }
+    .v .wall-col { width: 340px; }
+    .v #wall-col-2 { left: 356px; }
+    .v #wall-col-3 { left: 712px; }
+    .v .intro-fade {
+      left: 0;
+      height: 170px;
+    }
+    .v #intro-fade-top {
+      top: 660px;
+    }
+
+    /* Follower card: radius 32 = 24 inset + 8 */
+    .fc {
+      padding: 24px;
+      border-radius: 32px;
+      background: #ffffff;
+      border: 1px solid transparent;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        0 18px 40px -12px rgba(0, 0, 0, 0.16);
+    }
+    .fc-pfp {
+      display: block;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      object-fit: cover;
+      outline: 1px solid rgba(0, 0, 0, 0.1);
+      outline-offset: -1px;
+    }
+    .fc-name {
+      margin-top: 18px;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+    .fc-handle {
+      margin-top: 4px;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--color-muted, #6e6e73);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .fc-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.07);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .fc-ic {
+      width: 30px;
+      height: 30px;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <div id="root" data-composition-id="intro" data-width="{{W}}" data-height="{{H}}">
+    <div id="intro-stage" class="{{rootClass}}" data-layout-allow-overflow>
+      <div id="intro-wall" data-layout-allow-overflow data-layout-ignore data-motion-blur="off">
+        <div id="intro-plane">
+{{wallMarkup}}
+        </div>
+      </div>
+      <div class="intro-fade" id="intro-fade-top" data-layout-ignore></div>
+      <div class="intro-fade" id="intro-fade-bottom" data-layout-ignore></div>
+
+      <div id="intro-left">
+        {{meRow}}
+        <p id="intro-kicker">We just hit</p>
+        <div id="intro-num" aria-label="{{milestoneText}}">
+{{reelsMarkup}}
+        </div>
+        <p id="intro-unit">followers on X</p>
+
+        <h2 id="intro-head"><span>The</span> <span>people</span><br /><span>who</span> <span>hit</span> <span>follow.</span></h2>
+        <p id="intro-sub">{{subLine}}</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const HAS_WALL = {{hasWall}};
+      const STRIPS = {{stripsJson}};
+      const TICKS = {{ticksJson}};
+      const SCROLL = {{scroll}};
+      const CARRY = { x: {{carryX}}, y: {{carryY}} };
+      const ACCENT = getComputedStyle(document.documentElement).getPropertyValue("--color-accent").trim() || "#ff5a1f";
+      const INK = getComputedStyle(document.documentElement).getPropertyValue("--color-ink").trim() || "#0b0b0c";
+
+      // Long names shrink to a floor, then ellipsize; measured against the real card width.
+      const fit = () => {
+        document.querySelectorAll(".fc-name, .fc-handle").forEach((el) => {
+          const max = el.parentElement.clientWidth - 48;
+          const base = el.classList.contains("fc-name") ? 32 : 28;
+          el.style.fontSize = base + "px";
+          let size = base;
+          while (el.scrollWidth > max && size > 22) el.style.fontSize = --size + "px";
+          if (el.scrollWidth > max) {
+            el.style.overflow = "hidden";
+            el.style.textOverflow = "ellipsis";
+          }
+        });
+      };
+      fit();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
+      // 1. Counter ticks like a slot reel: one tick per step from milestone-3 to milestone.
+      const TICK_T = [0.35, 0.75, 1.12];
+      const tick = { duration: 0.32, ease: "power3.out" };
+      const idx = STRIPS.map(() => 0);
+      const first = STRIPS.map(() => true);
+      TICKS.forEach(({ pos, tick: k }) => {
+        idx[pos] += 1;
+        const to = { yPercent: -(100 * idx[pos]) / STRIPS[pos].length, ...tick };
+        if (first[pos]) tl.fromTo("#dg-" + pos, { yPercent: 0 }, to, TICK_T[k]);
+        else tl.to("#dg-" + pos, to, TICK_T[k]);
+        first[pos] = false;
+      });
+      // The number lands: accent flood, one spring punch from its centre, then still.
+      tl.fromTo("#intro-num", { color: INK }, { color: ACCENT, duration: 0.24, ease: "power2.inOut" }, 1.2);
+      tl.fromTo("#intro-num", { scale: 1, x: 0, y: 0 }, { scale: 1.06, x: -23, y: -12, duration: 0.1, ease: "power2.out" }, 1.2);
+      tl.to("#intro-num", { scale: 1, x: 0, y: 0, duration: 0.55, ease: "back.out(1.6)" }, 1.3);
+
+      if (!HAS_WALL) {
+        // Counter only: hold, then the whole hook whips out to the next scene.
+        tl.fromTo(
+          ["#intro-left"],
+          { x: 0, filter: "blur(0px)" },
+          { x: -1400, filter: "blur(18px)", duration: 0.3, ease: "power3.in" },
+          2.9,
+        );
+        tl.set("#intro-head, #intro-sub, #intro-wall", { opacity: 0 }, 0);
+        window.__timelines["intro"] = tl;
+        return;
+      }
+
+      // 2. Carry: the copy blurs out, the number slides into the panel.
+      tl.fromTo(
+        ["#intro-me", "#intro-kicker", "#intro-unit"],
+        { opacity: 1, filter: "blur(0px)" },
+        { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power3.in", stagger: 0.04 },
+        2.3,
+      );
+      tl.to("#intro-num", { x: CARRY.x, y: CARRY.y, scale: 0.5, duration: 0.7, ease: "power3.inOut" }, 2.36);
+      tl.fromTo(
+        "#intro-head span",
+        { opacity: 0, filter: "blur(6px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.07 },
+        2.86,
+      );
+      tl.fromTo("#intro-sub", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 3.4);
+
+      // 3. Wall: columns rise in while each run scrolls at a constant speed.
+      tl.fromTo("#intro-wall", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 2.5);
+      tl.fromTo(".wall-col", { y: 1500 }, { y: 0, duration: 1.0, ease: "expo.out", stagger: 0.08 }, 2.5);
+      tl.fromTo(["#wall-run-1", "#wall-run-3"], { y: 0 }, { y: -SCROLL, duration: 4.5, ease: "none" }, 2.5);
+      tl.fromTo("#wall-run-2", { y: -SCROLL }, { y: 0, duration: 4.5, ease: "none" }, 2.5);
+
+      // Whip left out of the scene; the next scene arrives moving the same way.
+      tl.fromTo(
+        ["#intro-left", "#intro-wall"],
+        { x: 0, filter: "blur(0px)" },
+        { x: -1400, filter: "blur(18px)", duration: 0.3, ease: "power3.in" },
+        6.7,
+      );
+
+      window.__timelines["intro"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,12 @@
+# Real personal data from a user's X account: never commit.
+reference/
+data.json
+!examples/**/data.json
+**/assets/pfp/
+**/assets/me.*
+**/renders/
+.hyperframes/
+.thumbnails/
+node_modules/
+.DS_Store
+out/

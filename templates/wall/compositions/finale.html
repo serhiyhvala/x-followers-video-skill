@@ -1,0 +1,126 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffffff);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
+    }
+    #fin-stage {
+      position: absolute;
+      inset: 0;
+    }
+    .fin-ring {
+      position: absolute;
+      left: 960px;
+      top: 540px;
+      width: 0;
+      height: 0;
+    }
+    .v .fin-ring {
+      left: 540px;
+      top: 830px;
+    }
+    .fa {
+      position: absolute;
+      width: 68px;
+      height: 68px;
+      margin: -34px 0 0 -34px;
+    }
+    .fa-out {
+      width: 64px;
+      height: 64px;
+      margin: -32px 0 0 -32px;
+    }
+    .fa img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      outline: 1px solid rgba(0, 0, 0, 0.1);
+      outline-offset: -1px;
+      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.22);
+    }
+    #fin-copy {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 540px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(-50%);
+      text-align: center;
+    }
+    .v #fin-copy {
+      top: 830px;
+    }
+    #fin-num {
+      font-size: {{finFont}}px;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      color: var(--color-accent, #ff5a1f);
+      font-variant-numeric: tabular-nums;
+    }
+    #fin-thanks {
+      margin-top: 18px;
+      font-size: 60px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+    }
+    #fin-thanks span {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="finale" data-width="{{W}}" data-height="{{H}}">
+    <div id="fin-stage" class="{{rootClass}}">
+    <div class="fin-ring" id="fin-ring-in" data-layout-allow-overflow data-layout-ignore>
+{{ringIn}}
+    </div>
+    <div class="fin-ring" id="fin-ring-out" data-layout-allow-overflow data-layout-ignore>
+{{ringOut}}
+    </div>
+
+    <div id="fin-copy">
+      <p id="fin-num">{{milestoneText}}</p>
+      <p id="fin-thanks"><span>Thank</span> <span>you</span><br /><span>for</span> <span>all.</span></p>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const D = 5.0;
+
+      // Photos spiral out of the centre into two rings, newest follower first.
+      gsap.utils.toArray(".fin-ring .fa").forEach((el, i) => {
+        const x = Number(el.dataset.x), y = Number(el.dataset.y);
+        tl.fromTo(
+          el,
+          { x: -x * 0.86, y: -y * 0.86, scale: 0.3, opacity: 0.9 },
+          { x: 0, y: 0, scale: 1, opacity: 1, duration: 1.0, ease: "expo.out" },
+          i * 0.008,
+        );
+      });
+
+      // Slow counter-rotating orbit; each photo counter-spins so faces stay upright.
+      tl.fromTo("#fin-ring-in", { rotation: 0 }, { rotation: 16, duration: D, ease: "none" }, 0);
+      tl.fromTo("#fin-ring-in .fa img", { rotation: 0 }, { rotation: -16, duration: D, ease: "none" }, 0);
+      tl.fromTo("#fin-ring-out", { rotation: 0 }, { rotation: -11, duration: D, ease: "none" }, 0);
+      tl.fromTo("#fin-ring-out .fa img", { rotation: 0 }, { rotation: 11, duration: D, ease: "none" }, 0);
+
+      // The number lands, then the thank-you reads word by word.
+      tl.fromTo("#fin-num", { opacity: 0, scale: 1.3, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.3);
+      tl.fromTo("#fin-thanks span", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.09 }, 0.85);
+
+      window.__timelines["finale"] = tl;
+    })();
+  </script>
+</template>

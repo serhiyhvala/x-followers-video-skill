@@ -1,0 +1,323 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffffff);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
+    }
+    #stats-stage {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+    }
+    .st-beat {
+      position: absolute;
+      inset: 0;
+    }
+    #st-c {
+      opacity: 0;
+    }
+    .st-label {
+      position: absolute;
+      left: 140px;
+      top: 300px;
+      font-size: 46px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .st-label span {
+      display: inline-block;
+    }
+    .st-label .st-muted {
+      color: var(--color-muted, #6e6e73);
+    }
+    /* Line height 1 and light tracking: glyphs keep their full box. */
+    .st-num {
+      position: absolute;
+      left: 132px;
+      top: 372px;
+      font-size: 220px;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .st-sub {
+      position: absolute;
+      left: 140px;
+      top: 620px;
+      font-size: 38px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .st-chart {
+      position: absolute;
+      left: 960px;
+      top: 250px;
+      width: 820px;
+    }
+    #st-source {
+      position: absolute;
+      left: 140px;
+      top: 930px;
+      font-size: 28px;
+      font-weight: 500;
+      color: #86868b;
+      white-space: nowrap;
+    }
+    .v .st-label { left: 80px; top: 250px; }
+    .v .st-num { left: 72px; top: 318px; }
+    .v .st-sub { left: 80px; top: 566px; }
+    .v .st-chart { left: 90px; top: 660px; width: 900px; }
+    .v #st-source { left: 80px; top: 1270px; }
+
+    /* A: impressions line */
+    #st-line-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+    #st-line {
+      fill: none;
+      stroke: var(--color-ink, #0b0b0c);
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #st-area {
+      fill: rgba(11, 11, 12, 0.06);
+    }
+    #st-base {
+      stroke: rgba(0, 0, 0, 0.12);
+      stroke-width: 2;
+    }
+    .st-pt {
+      fill: var(--color-ink, #0b0b0c);
+      stroke: var(--color-ground, #ffffff);
+      stroke-width: 5;
+    }
+    .st-pt.peak {
+      fill: var(--color-accent, #ff5a1f);
+    }
+    .st-axis-t {
+      font-size: 28px;
+      font-weight: 500;
+      fill: var(--color-muted, #6e6e73);
+    }
+    #st-peak-t {
+      font-size: 36px;
+      font-weight: 800;
+      fill: var(--color-ink, #0b0b0c);
+    }
+
+    /* C: follows up, unfollows down */
+    #st-cols {
+      display: flex;
+      gap: 26px;
+    }
+    .col {
+      width: 92px;
+      flex: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .col-up {
+      height: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .col-down {
+      height: 110px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 2px solid rgba(0, 0, 0, 0.14);
+    }
+    .bar-val {
+      margin-bottom: 12px;
+      font-size: 32px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .bar-up {
+      width: 100%;
+      border-radius: 16px 16px 6px 6px;
+      background: rgba(11, 11, 12, 0.12);
+      transform-origin: 50% 100%;
+    }
+    .bar-up.best {
+      background: var(--color-accent, #ff5a1f);
+    }
+    .bar-down {
+      width: 100%;
+      border-radius: 6px 6px 16px 16px;
+      background: rgba(11, 11, 12, 0.3);
+      transform-origin: 50% 0%;
+    }
+    .bar-neg {
+      margin-top: 8px;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--color-muted, #6e6e73);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .col-day {
+      margin-top: 6px;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--color-muted, #6e6e73);
+      white-space: nowrap;
+    }
+  </style>
+
+  <div id="root" data-composition-id="stats" data-width="{{W}}" data-height="{{H}}">
+    <div id="stats-stage" class="{{rootClass}}">
+      <section class="st-beat" id="st-a">
+        <h2 class="st-label"><span>Impressions</span> <span class="st-muted">· last 7 days</span></h2>
+        <p class="st-num" id="st-a-num">0</p>
+        <p class="st-sub" id="st-a-sub"></p>
+        <div class="st-chart">
+          <svg id="st-line-svg" viewBox="0 0 820 560" aria-hidden="true">
+            <line id="st-base" x1="0" y1="470" x2="820" y2="470" />
+            <path id="st-area" d="M0 470" />
+            <path id="st-line" d="M0 470" />
+            <g id="st-pts"></g>
+            <text id="st-peak-t" text-anchor="middle" x="0" y="0"></text>
+            <g id="st-days"></g>
+          </svg>
+        </div>
+      </section>
+
+      <section class="st-beat" id="st-c">
+        <h2 class="st-label" id="st-c-label"><span>New</span> <span>followers</span> <span class="st-muted">· this week</span></h2>
+        <p class="st-num" id="st-c-num">+0</p>
+        <p class="st-sub" id="st-c-sub"></p>
+        <div class="st-chart"><div id="st-cols"></div></div>
+      </section>
+
+      <p id="st-source">{{sourceLine}}</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const A = {{analyticsJson}};
+      const HAS_GROWTH = {{hasGrowth}};
+      const DAYS = A.days, IMP = A.impressions;
+      const sum = (a) => a.reduce((x, y) => x + y, 0);
+      // X rounds impressions down to one decimal and drops ".0": 120,094 -> 120K.
+      const short = (n) =>
+        n >= 1e6 ? (Math.floor(n / 1e5) / 10).toFixed(1).replace(/\.0$/, "") + "M"
+        : n >= 1000 ? (Math.floor(n / 100) / 10).toFixed(1).replace(/\.0$/, "") + "K"
+        : String(Math.round(n));
+      const NS = "http://www.w3.org/2000/svg";
+
+      // A: line, area, points, peak label, day labels.
+      const subA = document.getElementById("st-a-sub");
+      if (A.impressionsChangePct == null) subA.textContent = short(sum(IMP)) + " in 7 days";
+      else subA.textContent = (A.impressionsChangePct >= 0 ? "↑ " : "↓ ") + Math.abs(A.impressionsChangePct) + "% vs the week before";
+      const left = 50, right = 770, top = 90, base = 470;
+      const hi = Math.max(...IMP, 1);
+      const pts = IMP.map((n, i) => [left + (i / 6) * (right - left), base - (n / hi) * (base - top)]);
+      const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+      const line = document.getElementById("st-line");
+      line.setAttribute("d", d);
+      document.getElementById("st-area").setAttribute("d", d + ` L ${right} ${base} L ${left} ${base} Z`);
+      const peakI = IMP.indexOf(hi);
+      const ptsG = document.getElementById("st-pts");
+      pts.forEach((p, i) => {
+        const c = document.createElementNS(NS, "circle");
+        c.setAttribute("class", "st-pt" + (i === peakI ? " peak" : ""));
+        c.setAttribute("cx", p[0]);
+        c.setAttribute("cy", p[1]);
+        c.setAttribute("r", i === peakI ? 15 : 9);
+        ptsG.appendChild(c);
+      });
+      const peakT = document.getElementById("st-peak-t");
+      peakT.textContent = short(hi);
+      peakT.setAttribute("x", Math.min(Math.max(pts[peakI][0], 70), 750));
+      peakT.setAttribute("y", pts[peakI][1] - 34);
+      const daysG = document.getElementById("st-days");
+      pts.forEach((p, i) => {
+        const t = document.createElementNS(NS, "text");
+        t.setAttribute("class", "st-axis-t");
+        t.setAttribute("text-anchor", "middle");
+        t.setAttribute("x", p[0]);
+        t.setAttribute("y", base + 52);
+        t.textContent = DAYS[i];
+        daysG.appendChild(t);
+      });
+      const len = Math.ceil(pts.reduce((a, p, i) => (i ? a + Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]) : 0), 0)) + 2;
+      line.style.strokeDasharray = len;
+      line.style.strokeDashoffset = len;
+
+      const tl = gsap.timeline({ paused: true });
+      const counter = (id, fmt, to, at, dur) => {
+        const el = document.getElementById(id);
+        const o = { n: 0 };
+        el.textContent = fmt(0);
+        tl.fromTo(o, { n: 0 }, { n: to, duration: dur, ease: "power2.out", onUpdate: () => (el.textContent = fmt(o.n)) }, at);
+      };
+
+      // A: arrives on the whip from the previous scene, moving left.
+      tl.fromTo("#st-a", { x: 1100, filter: "blur(18px)" }, { x: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0);
+      counter("st-a-num", short, sum(IMP), 0.12, 1.3);
+      tl.fromTo(line, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.3, ease: "power2.out" }, 0.12);
+      tl.fromTo("#st-area", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.3, ease: "power2.out" }, 0.12);
+      tl.fromTo(".st-pt", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(1.6)", stagger: 0.16 }, 0.2);
+      tl.fromTo("#st-peak-t", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 0.5);
+      tl.fromTo("#st-a-sub", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.4);
+      tl.fromTo("#st-source", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.4);
+
+      if (!HAS_GROWTH) {
+        tl.to("#stats-stage", { scale: 0.8, opacity: 0, filter: "blur(14px)", duration: 0.3, ease: "power3.in" }, 2.1);
+        window.__timelines["stats"] = tl;
+        return;
+      }
+
+      // C: follows above the line, unfollows below, on one scale.
+      const FOLLOWS = A.follows, UNFOLLOWS = A.unfollows;
+      const net = sum(FOLLOWS) - sum(UNFOLLOWS);
+      document.getElementById("st-c-sub").textContent = sum(FOLLOWS) + " follows, " + sum(UNFOLLOWS) + " unfollows";
+      const fmax = Math.max(...FOLLOWS, 1);
+      const scale = 300 / fmax;
+      document.getElementById("st-cols").innerHTML = FOLLOWS.map(
+        (n, i) =>
+          `<div class="col"><div class="col-up"><span class="bar-val">+${n}</span><div class="bar-up${n === fmax ? " best" : ""}" style="height:${Math.max(6, n * scale)}px"></div></div>` +
+          `<div class="col-down">${UNFOLLOWS[i] ? `<div class="bar-down" style="height:${Math.max(4, UNFOLLOWS[i] * scale)}px"></div><span class="bar-neg">−${UNFOLLOWS[i]}</span>` : ""}</div>` +
+          `<span class="col-day">${DAYS[i]}</span></div>`,
+      ).join("");
+
+      tl.to("#st-a", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power3.in" }, 2.06);
+      tl.fromTo("#st-c", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 2.24);
+      tl.fromTo("#st-c-label span:not(.st-muted)", { color: "#d8d8dc" }, { color: getComputedStyle(document.documentElement).getPropertyValue("--color-ink").trim() || "#0b0b0c", duration: 0.2, ease: "power2.out", stagger: 0.09 }, 2.24);
+      tl.fromTo("#st-c-label .st-muted", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 2.4);
+      tl.fromTo("#st-c-num", { opacity: 0, filter: "blur(10px)", scale: 1.12, transformOrigin: "0% 60%" }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.55, ease: "expo.out" }, 2.28);
+      counter("st-c-num", (n) => (net >= 0 ? "+" : "−") + Math.abs(Math.round(n)), net, 2.3, 1.1);
+      tl.fromTo(".bar-up", { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: "expo.out", stagger: 0.06 }, 2.34);
+      tl.fromTo(".bar-down", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "expo.out", stagger: 0.06 }, 2.6);
+      tl.fromTo([".bar-val", ".bar-neg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out", stagger: 0.04 }, 2.6);
+      tl.fromTo("#st-c-sub", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 2.65);
+
+      // Exit: the stage falls into depth; the finale bursts out of the centre.
+      tl.to("#stats-stage", { scale: 0.8, opacity: 0, filter: "blur(14px)", duration: 0.3, ease: "power3.in" }, 4.1);
+
+      window.__timelines["stats"] = tl;
+    })();
+  </script>
+</template>
