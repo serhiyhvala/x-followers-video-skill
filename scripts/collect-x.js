@@ -144,13 +144,21 @@
     return null;
   }
   function seriesFrom(rows) {
-    // rows like [{date:"Nov 2", impressions: 46641}, ...]: every numeric key becomes a series.
+    // rows like [{date:"Nov 2", impressions: 46641}, ...] or [{timestamp: 1794096000000, Impressions: 6718}, ...]
+    // (X lists those newest first): every numeric key becomes a series, oldest day first.
     var series = {};
     var labels = [];
+    rows = rows.slice();
+    if (rows.length && typeof rows[0].timestamp === "number") {
+      rows.sort(function (a, b) { return a.timestamp - b.timestamp; });
+      rows.forEach(function (row) { row = row; });
+    }
     rows.forEach(function (row, i) {
+      if (typeof row.timestamp === "number") labels[i] = new Date(row.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
       Object.keys(row).forEach(function (k) {
         var v = row[k];
-        if (typeof v === "number") (series[k] = series[k] || [])[i] = v;
+        if (k === "timestamp" || k === "index") return;
+        if (typeof v === "number") (series[k] = series[k] || [])[i] = Math.abs(v); // unfollows come back negative
         else if (typeof v === "string" && labels.length === i) labels.push(v);
       });
     });
@@ -172,7 +180,7 @@
     var main = text(document.querySelector(SELECTORS.analyticsMain));
     var pct = main.match(/Impressions[\s\S]{0,80}?([+\-−]?\d+(?:\.\d+)?)%/);
     var rangeM = main.match(/([A-Z][a-z]{2} \d{1,2})\s*[–-]\s*([A-Z][a-z]{2} \d{1,2})(?:,? (\d{4}))?/);
-    var labels = (imp && imp.labels.length === DAYS ? imp.labels : null) || dayLabels(rangeM);
+    var labels = [imp, fol, unf].filter(Boolean).map(function (x) { return x.labels; }).filter(function (l) { return l.length === DAYS; })[0] || dayLabels(rangeM);
     state.analytics = imp
       ? {
           range: rangeM ? rangeM[0] : labels[0] + " – " + labels[DAYS - 1],
