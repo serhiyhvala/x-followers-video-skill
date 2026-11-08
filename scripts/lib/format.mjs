@@ -31,14 +31,19 @@ export function initials(name, handle) {
   return out;
 }
 
-/** Deterministic 32-bit hash for picking colours per handle. */
+/** Deterministic 32-bit hash (FNV-1a with a murmur3 finaliser, so "x1" and "x2" land far apart). */
 export function hash(s) {
   let h = 2166136261;
   for (const ch of String(s)) {
     h ^= ch.codePointAt(0);
     h = Math.imul(h, 16777619) >>> 0;
   }
-  return h;
+  h ^= h >>> 16;
+  h = Math.imul(h, 0x85ebca6b) >>> 0;
+  h ^= h >>> 13;
+  h = Math.imul(h, 0xc2b2ae35) >>> 0;
+  h ^= h >>> 16;
+  return h >>> 0;
 }
 
 /**

@@ -1,0 +1,91 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffd43b);
+      color: var(--color-ink, #111111);
+      font-family: "Archivo Black", Inter, sans-serif;
+    }
+    #fin-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #fi-grid {
+      position: absolute;
+      left: {{gx}}px;
+      top: {{gy}}px;
+      width: {{gridW}}px;
+      height: {{gridH}}px;
+      transform-origin: 50% 50%;
+    }
+    .mo-tile {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: {{tile}}px;
+      height: {{tile}}px;
+      border-radius: {{tileRadius}}px;
+      overflow: hidden;
+      background: var(--color-ink, #111111);
+      box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.35);
+    }
+    .mo-tile img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #fi-thanks {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: {{unitTop}}px;
+      text-align: center;
+      font-size: 72px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    #fi-thanks span {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="finale" data-width="{{W}}" data-height="{{H}}">
+    <div id="fin-stage" class="{{rootClass}}">
+      <div id="fi-grid" data-layout-allow-overflow data-layout-ignore>
+{{finaleTiles}}
+      </div>
+      <p id="fi-thanks"><span>Thank</span> <span>you</span> <span>for</span> <span>all.</span></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const tiles = gsap.utils.toArray("#fi-grid .mo-tile").map((el) => {
+        const [sx, sy, rot] = el.dataset.sc.split(",").map(Number);
+        const states = el.dataset.s.split("|").map((s) => (s === "-" ? null : s.split(",").map(Number)));
+        return { el, sx, sy, rot, cell: states[states.length - 1] };
+      });
+
+      // The tiles converge from a wide scatter back into the number, newest first.
+      tiles.forEach((t, i) => {
+        if (!t.cell) return gsap.set(t.el, { scale: 0 });
+        tl.fromTo(
+          t.el,
+          { x: t.sx, y: t.sy, rotation: t.rot, scale: 0.5, opacity: 0.9 },
+          { x: t.cell[0], y: t.cell[1], rotation: 0, scale: 1, opacity: 1, duration: 0.9, ease: "expo.out" },
+          0.05 + (i % 29) * 0.012,
+        );
+      });
+      tl.fromTo("#fi-grid", { scale: 1 }, { scale: 1.03, duration: 0.1, ease: "power2.out" }, 1.05);
+      tl.to("#fi-grid", { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 1.15);
+      tl.fromTo("#fi-thanks span", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out", stagger: 0.09 }, 1.2);
+
+      window.__timelines["finale"] = tl;
+    })();
+  </script>
+</template>

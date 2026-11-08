@@ -1,0 +1,114 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #ffd43b);
+      color: var(--color-ink, #111111);
+      font-family: "Archivo Black", Inter, sans-serif;
+    }
+    #form-stage {
+      position: absolute;
+      inset: 0;
+    }
+    #mo-kicker,
+    #mo-unit {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 64px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    #mo-kicker {
+      top: {{kickerTop}}px;
+    }
+    #mo-unit {
+      top: {{unitTop}}px;
+    }
+    #mo-grid {
+      position: absolute;
+      left: {{gx}}px;
+      top: {{gy}}px;
+      width: {{gridW}}px;
+      height: {{gridH}}px;
+      transform-origin: 50% 50%;
+    }
+    .mo-tile {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: {{tile}}px;
+      height: {{tile}}px;
+      border-radius: {{tileRadius}}px;
+      overflow: hidden;
+      background: var(--color-ink, #111111);
+      box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.35);
+    }
+    .mo-tile img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+
+  <div id="root" data-composition-id="form" data-width="{{W}}" data-height="{{H}}">
+    <div id="form-stage" class="{{rootClass}}">
+      <p id="mo-kicker">We just hit</p>
+      <div id="mo-grid" data-layout-allow-overflow data-layout-ignore>
+{{formTiles}}
+      </div>
+      <p id="mo-unit">followers on X</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const STEPS = {{stepCount}};
+      const TICK_T = [1.55, 1.95, 2.35, 2.75, 3.15, 3.55]; // one per step after the first
+      const tiles = gsap.utils.toArray("#mo-grid .mo-tile").map((el) => {
+        const [sx, sy, rot] = el.dataset.sc.split(",").map(Number);
+        const states = el.dataset.s.split("|").map((s) => (s === "-" ? null : s.split(",").map(Number)));
+        return { el, sx, sy, rot, states };
+      });
+
+      // Frame 0: the tiles lie scattered across the poster; then they fly into the digits.
+      tiles.forEach((t, i) => {
+        const s0 = t.states[0];
+        if (s0) {
+          tl.fromTo(t.el, { x: t.sx, y: t.sy, rotation: t.rot, scale: 0.85, opacity: 1 }, { x: s0[0], y: s0[1], rotation: 0, scale: 1, duration: 0.9, ease: "expo.out" }, 0.3 + (i % 23) * 0.012);
+        } else {
+          gsap.set(t.el, { x: t.sx, y: t.sy, rotation: 0, scale: 0, opacity: 1 });
+        }
+      });
+
+      // Each step: tiles of the changing digit move, leave, or arrive.
+      for (let k = 1; k < STEPS; k++) {
+        const at = TICK_T[k - 1];
+        tiles.forEach((t) => {
+          const a = t.states[k - 1], b = t.states[k];
+          if (!a && !b) return;
+          if (a && b && a[0] === b[0] && a[1] === b[1]) return;
+          if (a && b) tl.to(t.el, { x: b[0], y: b[1], duration: 0.32, ease: "power3.inOut" }, at);
+          else if (a) tl.to(t.el, { scale: 0, duration: 0.2, ease: "power3.in" }, at);
+          else tl.fromTo(t.el, { x: b[0], y: b[1], scale: 0 }, { scale: 1, duration: 0.32, ease: "back.out(1.6)" }, at + 0.08);
+        });
+      }
+      const landed = STEPS > 1 ? TICK_T[STEPS - 2] + 0.3 : 1.3;
+      tl.fromTo("#mo-grid", { scale: 1 }, { scale: 1.04, duration: 0.1, ease: "power2.out" }, landed);
+      tl.to("#mo-grid", { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, landed + 0.1);
+      tl.fromTo("#mo-unit", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, landed + 0.1);
+
+      // Exit: the whole poster whips up; the next scene rises from below.
+      tl.to(["#mo-kicker", "#mo-unit"], { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power3.in" }, 4.3);
+      tl.to("#mo-grid", { y: -1400, duration: 0.3, ease: "power3.in" }, 4.3);
+
+      window.__timelines["form"] = tl;
+    })();
+  </script>
+</template>
