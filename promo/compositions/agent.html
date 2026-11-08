@@ -1,0 +1,311 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-desk, #d9dde3);
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
+    }
+    /* World 2: a chat with the agent. One message in, the agent's steps and the file out. */
+    #ag-win {
+      position: absolute;
+      left: 220px;
+      top: 70px;
+      width: 1480px;
+      height: 940px;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid transparent;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.08),
+        0 30px 70px -20px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+    }
+    #ag-head {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 32px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      font-weight: 700;
+      font-size: 28px;
+    }
+    #ag-head .dot { width: 14px; height: 14px; border-radius: 50%; background: #3fb950; }
+    #ag-head .skill { font-weight: 500; color: var(--color-muted, #6e6e73); }
+    #ag-thread {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 72px;
+      height: 758px;
+      overflow: hidden;
+    }
+    #ag-scroll { position: absolute; left: 0; right: 0; top: 40px; }
+    .ag-row { position: absolute; left: 0; right: 0; }
+    /* You */
+    #ag-user {
+      top: 0;
+      display: flex;
+      justify-content: flex-end;
+      opacity: 0;
+    }
+    #ag-bubble {
+      max-width: 960px;
+      padding: 18px 28px;
+      border-radius: 26px 26px 8px 26px;
+      background: var(--color-ink, #0b0b0c);
+      color: #ffffff;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.3;
+      white-space: nowrap;
+      transform-origin: 100% 100%;
+    }
+    #ag-bubble b { color: var(--color-accent, #ff5a1f); font-weight: 700; }
+    /* Agent */
+    .ag-agent { display: flex; align-items: flex-start; gap: 22px; }
+    .ag-av {
+      flex: none;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--color-accent, #ff5a1f);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 900;
+    }
+    .ag-text { font-size: 32px; font-weight: 500; line-height: 52px; white-space: nowrap; }
+    .ag-step { display: flex; align-items: center; gap: 18px; height: 60px; }
+    .ag-step .st { flex: none; width: 36px; height: 36px; position: relative; }
+    .ag-step .spin {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 4px solid rgba(0, 0, 0, 0.12); border-top-color: var(--color-ink, #0b0b0c);
+    }
+    .ag-step .ok {
+      position: absolute; inset: 0; border-radius: 50%; background: #3fb950; opacity: 0;
+    }
+    .ag-step .ok::after {
+      content: ""; position: absolute; left: 11px; top: 6px; width: 9px; height: 16px;
+      border: solid #fff; border-width: 0 4px 4px 0; transform: rotate(45deg);
+    }
+    .ag-step .lbl { font-size: 30px; font-weight: 600; white-space: nowrap; }
+    .ag-step .cmd {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 28px;
+      color: var(--color-muted, #6e6e73);
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      padding: 8px 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      line-height: 1;
+    }
+    .ag-step .done { font-size: 28px; font-weight: 500; color: var(--color-muted, #6e6e73); white-space: nowrap; opacity: 0; }
+    /* Tool result: the real followers page being read */
+    #ag-shot {
+      position: absolute;
+      left: 74px;
+      top: 330px;
+      width: 560px;
+      height: 350px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 20px 40px -18px rgba(0, 0, 0, 0.35);
+      background: #fff;
+      opacity: 0;
+    }
+    #ag-shot img { display: block; width: 560px; height: 350px; }
+    #ag-scan {
+      position: absolute; left: 0; right: 0; top: 40px; height: 40px;
+      background: rgba(255, 90, 31, 0.18); border-left: 5px solid var(--color-accent, #ff5a1f);
+    }
+    #ag-shot-cap {
+      position: absolute; left: 660px; top: 330px; width: 600px;
+      font-size: 28px; line-height: 1.35; color: var(--color-muted, #6e6e73); opacity: 0;
+    }
+    /* Progress */
+    .bar-track { display: inline-block; width: 420px; height: 14px; border-radius: 7px; background: rgba(0, 0, 0, 0.08); overflow: hidden; vertical-align: middle; }
+    .bar-fill { display: block; height: 100%; width: 100%; background: #3fb950; transform-origin: 0 50%; }
+    /* The file: a video attachment card the film will grow out of */
+    #ag-card {
+      position: absolute;
+      left: 74px;
+      top: 860px;
+      width: 360px;
+      height: 202px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0b0b0c;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 20px 40px -18px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+    }
+    #ag-card img { display: block; width: 360px; height: 202px; object-fit: cover; }
+    #ag-card .play {
+      position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px;
+      border-radius: 50%; background: rgba(255, 255, 255, 0.92);
+    }
+    #ag-card .play::after {
+      content: ""; position: absolute; left: 26px; top: 19px;
+      border-left: 20px solid #0b0b0c; border-top: 13px solid transparent; border-bottom: 13px solid transparent;
+    }
+    #ag-card-cap { position: absolute; left: 460px; top: 876px; font-size: 28px; line-height: 1.4; opacity: 0; }
+    #ag-card-cap b { font-weight: 700; }
+    #ag-card-cap span { color: var(--color-muted, #6e6e73); }
+    #ag-done { top: 1080px; opacity: 0; }
+    /* Composer */
+    #ag-composer {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: 30px;
+      height: 80px;
+      border-radius: 40px;
+      border: 2px solid rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      padding: 0 12px 0 32px;
+      font-size: 30px;
+      font-weight: 500;
+    }
+    #ag-input { flex: 1; white-space: nowrap; overflow: hidden; }
+    #ag-input .ph { color: rgba(11, 11, 12, 0.55); }
+    #ag-input .typed { display: inline-block; overflow: hidden; white-space: pre; vertical-align: bottom; }
+    #ag-send {
+      flex: none; width: 56px; height: 56px; border-radius: 50%;
+      background: var(--color-ink, #0b0b0c); position: relative;
+    }
+    #ag-send::after {
+      content: ""; position: absolute; left: 20px; top: 16px; width: 14px; height: 14px;
+      border: solid #fff; border-width: 3px 0 0 3px; transform: rotate(45deg);
+    }
+    #ag-send::before {
+      content: ""; position: absolute; left: 26px; top: 18px; width: 3px; height: 22px; background: #fff;
+    }
+    #ag-cursor {
+      position: absolute; left: 0; top: 0; width: 80px; height: 80px; z-index: 5;
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
+    }
+  </style>
+
+  <div id="root" data-composition-id="agent" data-width="1920" data-height="1080">
+    <div id="ag-win" data-layout-allow-overflow>
+      <div id="ag-head"><span class="dot"></span>Your agent <span class="skill">· x-followers-video-skill</span></div>
+      <div id="ag-thread">
+        <div id="ag-scroll">
+          <div class="ag-row" id="ag-user"><div id="ag-bubble">Make a video for my <b>223</b> followers, wall template, 16:9</div></div>
+
+          <div class="ag-row ag-agent" id="ag-a0" style="top: 110px; opacity: 0"><div class="ag-av">✦</div><div class="ag-text">On it. Four steps.</div></div>
+
+          <div class="ag-row ag-step" id="ag-s1" style="top: 176px; left: 74px; opacity: 0">
+            <span class="st"><span class="spin"></span><span class="ok"></span></span>
+            <span class="lbl">Installing the skill</span>
+            <span class="cmd" data-cmd>npx skills add serhiyhvala/x-followers-video-skill</span>
+            <span class="done">installed</span>
+          </div>
+          <div class="ag-row ag-step" id="ag-s2" style="top: 246px; left: 74px; opacity: 0">
+            <span class="st"><span class="spin"></span><span class="ok"></span></span>
+            <span class="lbl">Reading your X in your browser</span>
+            <span class="done">223 followers · 60 newest · 7-day analytics</span>
+          </div>
+          <div id="ag-shot" data-motion-blur="off"><img src="assets/followers.png" alt="" /><div id="ag-scan"></div></div>
+          <p id="ag-shot-cap">Profile, the followers page and Analytics, read on your own logged-in x.com. Nothing leaves your machine; no paid API.</p>
+
+          <div class="ag-row ag-step" id="ag-s3" style="top: 720px; left: 74px; opacity: 0">
+            <span class="st"><span class="spin"></span><span class="ok"></span></span>
+            <span class="lbl">Building wall, 16:9</span>
+            <span class="cmd" data-cmd>build.mjs --template wall --aspect 16x9</span>
+            <span class="done">16.4 s · 3 scenes</span>
+          </div>
+          <div class="ag-row ag-step" id="ag-s4" style="top: 790px; left: 74px; opacity: 0">
+            <span class="st"><span class="spin"></span><span class="ok"></span></span>
+            <span class="lbl">Rendering</span>
+            <span class="bar-track"><span class="bar-fill" id="ag-fill"></span></span>
+            <span class="done" id="ag-pct">rendered in 19.2 s</span>
+          </div>
+
+          <div id="ag-card"><img src="assets/wall-poster.jpg" alt="" /><div class="play"></div></div>
+          <p id="ag-card-cap"><b>wall-16x9.mp4</b><br /><span>16.4 s · 1920×1080 · silent</span></p>
+          <div class="ag-row ag-agent" id="ag-done"><div class="ag-av">✦</div><div class="ag-text">Done. Every one of them is in it.</div></div>
+        </div>
+      </div>
+      <div id="ag-composer">
+        <div id="ag-input"><span class="ph" id="ag-ph">Message your agent</span><span class="typed" id="ag-typed" data-cmd>Make a video for my 223 followers, wall template, 16:9</span></div>
+        <div id="ag-send"></div>
+      </div>
+    </div>
+    <svg id="ag-cursor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 8.5-6.2 1.6L9 20z" fill="#0b0b0c" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" /></svg>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const CH = 30 * 0.62; // Inter 500 at 30 px averages about 0.62 em a character
+      const typed = document.getElementById("ag-typed");
+      const n = typed.textContent.length;
+      gsap.set(typed, { width: 0 });
+      gsap.set("#ag-ph", { autoAlpha: 1 });
+      gsap.set("#ag-cursor", { x: 1830, y: 990, autoAlpha: 0 });
+
+      // The window arrives on the drop from the reveal scene.
+      tl.fromTo("#ag-win", { scale: 1.06, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out", transformOrigin: "50% 50%" }, 0);
+
+      // 1. You type one message (frame 0 already shows the composer with the first words) and send it.
+      tl.set("#ag-ph", { autoAlpha: 0 }, 0);
+      tl.fromTo(typed, { width: 8 * CH }, { width: Math.ceil(n * CH) + 6, duration: 1.3, ease: `steps(${n - 8})` }, 0.1);
+      tl.to("#ag-cursor", { autoAlpha: 1, duration: 0.05 }, 1.1);
+      tl.to("#ag-cursor", { x: 1592, y: 968, duration: 0.5, ease: "power3.out" }, 1.1);
+      tl.to("#ag-cursor", { scale: 0.86, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "20% 15%" }, 1.65);
+      tl.to("#ag-send", { scale: 0.9, duration: 0.07, yoyo: true, repeat: 1 }, 1.65);
+      tl.to(typed, { width: 0, duration: 0.01 }, 1.75);
+      tl.set("#ag-ph", { autoAlpha: 1 }, 1.76);
+      tl.fromTo("#ag-user", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 1.75);
+      tl.fromTo("#ag-bubble", { y: 700, scale: 0.6 }, { y: 0, scale: 1, duration: 0.55, ease: "expo.out" }, 1.75);
+      tl.to("#ag-cursor", { x: 1830, y: 990, duration: 0.4, ease: "power3.in" }, 1.9);
+      tl.to("#ag-cursor", { autoAlpha: 0, duration: 0.05 }, 2.3);
+
+      // 2. The agent answers and runs the steps itself; each command types under its step, then the check lands.
+      const spin = (id, at, until) => tl.fromTo(id + " .spin", { rotation: 0 }, { rotation: 360 * Math.max(1, Math.round((until - at) / 0.8)), duration: until - at, ease: "none", transformOrigin: "50% 50%" }, at);
+      const step = (id, at, cmdDur, until) => {
+        tl.fromTo(id, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.3, ease: "expo.out" }, at);
+        const cmd = document.querySelector(id + " [data-cmd]");
+        if (cmd) {
+          const k = cmd.textContent.length;
+          gsap.set(cmd, { width: 0, paddingLeft: 0, paddingRight: 0 });
+          tl.to(cmd, { width: Math.ceil(k * 28 * 0.6) + 28, paddingLeft: 14, paddingRight: 14, duration: cmdDur, ease: `steps(${k})` }, at + 0.25);
+        }
+        spin(id, at, until);
+        tl.to(id + " .spin", { opacity: 0, duration: 0.1 }, until);
+        tl.fromTo(id + " .ok", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)", transformOrigin: "50% 50%" }, until);
+        tl.fromTo(id + " .done", { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }, until + 0.1);
+      };
+      tl.fromTo("#ag-a0", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 2.4);
+      step("#ag-s1", 2.8, 0.9, 4.1);
+      step("#ag-s2", 4.4, 0, 7.6);
+      tl.fromTo("#ag-shot", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 4.7);
+      tl.fromTo("#ag-shot-cap", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.0);
+      tl.fromTo("#ag-scan", { y: 0 }, { y: 270, duration: 2.4, ease: "steps(7)" }, 4.9);
+      // The thread scrolls up by whole rows so the newest step stays in view.
+      tl.to("#ag-scroll", { y: -420, duration: 0.45, ease: "power2.inOut" }, 8.6);
+      step("#ag-s3", 8.8, 1.1, 10.3);
+      step("#ag-s4", 10.6, 0, 12.4);
+      tl.fromTo("#ag-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.6, ease: "power1.inOut" }, 10.7);
+      // 3. The file lands as an attachment; the agent signs off; the cursor goes for the card.
+      tl.fromTo("#ag-card", { opacity: 0, y: 24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "expo.out", transformOrigin: "0% 0%" }, 12.6);
+      tl.fromTo("#ag-card-cap", { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }, 12.75);
+      tl.fromTo("#ag-done", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 13.1);
+      tl.to("#ag-cursor", { autoAlpha: 1, duration: 0.05 }, 14.0);
+      tl.to("#ag-cursor", { x: 470, y: 660, duration: 0.6, ease: "power3.out" }, 14.0);
+      tl.to("#ag-cursor", { scale: 0.86, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "20% 15%" }, 14.45);
+      tl.to("#ag-card", { scale: 0.96, duration: 0.06, yoyo: true, repeat: 1, transformOrigin: "50% 50%" }, 14.45);
+
+      window.__timelines["agent"] = tl;
+    })();
+  </script>
+</template>

@@ -1,9 +1,12 @@
 # Review: x-followers-video-skill launch film (1920x1080, 30 fps, 39 s, silent)
 
 ## Creative calls
-- Storyline A from `STORYLINES.md` (the number leaves the page): the real x.com profile is the hook, the real
-  install and build commands are the proof, the four real renders are the payoff, the install command is the
-  end card. Not built: B (the result first, an endless zoom back to the profile) and C (type on colour fields).
+- Storyline A from `STORYLINES.md` (the number leaves the page): the real x.com profile is the hook, a chat
+  with the agent is the proof (you send one message; the agent installs, reads your X in your browser, builds
+  and renders, showing each real command as a chip under its step), the wall render grows out of the agent's
+  attachment card as the payoff, the install command is the end card. The first cut showed the commands in a
+  bare terminal and read as "you type this"; the owner asked for the agent to be visibly doing the work.
+  Not built: B (the result first, an endless zoom back to the profile) and C (type on colour fields).
 - Silent by request; every line is kinetic type or the product's own text, each held 0.5 s + 0.3 s a word.
 - Real UI only: two screenshots of the owner's x.com (profile at 2x zoom, followers page) taken in the owner's
   browser; the four films were rendered from the owner's real data (223 followers, 60 newest, Nov 2–8 analytics).
@@ -15,8 +18,8 @@
 
 ## Measured
 - `hyperframes check --json`: ok. Kept warnings: `film_silent` (by request); `line_unread` on the terminal's
-  lines inside the payoff scene (they are the same lines the viewer has watched for 10 s in the previous scene,
-  carried over so the cut is invisible, then covered by the film); `nested_media_start_basis_ambiguous` on two
+  text inside the payoff scene (the chat's last state, carried over from the previous scene so the cut is
+  invisible, then covered by the film); `nested_media_start_basis_ambiguous` on two
   clips with a nonzero `data-start` inside the trio scene (verified by snapshot that each plays its intended
   stretch).
 - Review sheets read (beats, six seams, phone); fixes applied after the first pass: the profile strip stayed in
@@ -31,8 +34,8 @@
 - No sound by design, so nothing was heard. The film was not watched at full speed by a person yet.
 
 ## Weakest shot
-- The collect beat (13–18 s): the followers page is a static capture with a scanning highlight, not a live
-  scroll; a screen recording of the real collector run would be stronger.
+- The "reading your X" step (13–17 s): the followers page is a static capture with a scanning highlight as the
+  agent's tool result, not a live scroll; a screen recording of the real collector run would be stronger.
 
 ## Warnings kept on purpose
 - `film_silent`, the payoff-scene `line_unread` carry-over lines, the two nested-media-start warnings.

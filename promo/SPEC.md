@@ -3,8 +3,8 @@ OUTPUT:  HyperFrames, 1920x1080, 30 fps, silent by request (no <audio>); type an
 TIME:    38.0 s x 30 = 1140 frames. No music, so cuts land on motion.
 LOOK:    home ground #FFFFFF flat; ink #0B0B0C; muted #6E6E73; one accent #FF5A1F (the follower count, one word per claim,
          the end-card command). Display Inter 900 at 7-12% of the frame height, tracking -0.03em, tabular numbers; body Inter 600.
-         Worlds: (1) the real x.com profile as a screenshot on white, pushed to 1.6x; (2) the terminal world from the terminal
-         template: desktop #D9DDE3, window #14171C radius 18, JetBrains Mono 30/44, green #3FB950, blue #79C0FF, yellow #E3B341;
+         Worlds: (1) the real x.com profile as a screenshot on white, pushed to 1.6x; (2) a chat with the agent: desktop #D9DDE3,
+         white window radius 24, Inter 30-32, ink bubble, accent avatar, commands as JetBrains Mono 26 chips, green #3FB950 checks;
          (3) the four rendered films themselves, full frame; (4) the end card on white. Cursor 80 px, black, enters from off-screen.
 OBJECTS: the real profile page (screenshot, real "222 Followers"); a data.json panel (mono, real values); the terminal window with
          real commands and real output lines; four real MP4s rendered from the owner's data; the install command as a copyable line.
@@ -17,13 +17,14 @@ SHOTS:
   2  3.0-6.0   TENSION: profile blurs 10 px and dims; on white, two lines, one at a time: "A post says thanks." / "This shows them."
   3  6.0-8.8   REVEAL: "x-followers-video-skill" lands as a wordmark (Inter 900, 110 px) with "an agent skill" under it; the
                number 222 drops from the title into a data.json panel: { "milestone": 222, "followers": 60, "analytics": "7d" }.
-  4  8.8-13.6  INSTALL: the desktop world; terminal types `npx skills add serhiyhvala/x-followers-video-skill`, Enter,
-               the real output lines (Installed 1 skill, -> .claude/skills/x-followers-video-skill).
-  5  13.6-18.4 COLLECT: the real followers page (screenshot) slides in beside the terminal; `collect-x.js` is pasted (one typed line),
-               the page scrolls, data.json fills: 60 newest followers, 7-day impressions 123.3K.
-  6  18.4-23.0 BUILD + RENDER: `node scripts/build.mjs --template wall --aspect 16x9` prints "built wall-16x9 · 1920x1080 · 16.4 s";
-               `npm run render` prints a progress bar and "renders/wall-16x9.mp4"; the cursor clicks the file name.
-  7  23.0-29.0 PAYOFF: the wall film zooms out of that line to full frame (0.45 s, power3.in) and plays its finale (rings around 222).
+  4  8.8-10.6  ASK: a chat with the agent; one message types in the composer ("Make a video for my 223 followers, wall
+               template, 16:9"), the cursor clicks send, the bubble pops into the thread.
+  5  10.6-21.0 THE AGENT WORKS: four steps stream in its reply, each with a spinner that becomes a check and the real
+               command it ran under it: install (npx skills add …), read your X in your browser (the real followers page
+               as a tool result, a scan bar reading rows), build (node scripts/build.mjs …), render (progress bar).
+  6  21.0-23.4 THE FILE: wall-16x9.mp4 lands as an attachment card with a poster frame; "Done. Every one of them is in it.";
+               the cursor clicks the card.
+  7  23.4-29.4 PAYOFF: the wall film zooms out of that card to full frame (0.5 s, power3.in) and plays its finale (rings around 223).
   8  29.0-33.0 THE OTHER THREE: hard cut on the ring punch to mosaic, then receipt, then terminal, 1.3 s each, each on its own
                strongest moment, with a one-word label in the corner band of the ground ("mosaic", "receipt", "terminal").
   9  33.0-35.0 CLAIM: on white, "Every follower sees themselves." lands per word; "Four templates · 16:9 and 9:16 · silent" under it.

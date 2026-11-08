@@ -5,39 +5,50 @@
       inset: 0;
       overflow: hidden;
       background: var(--color-desk, #d9dde3);
-      font-family: "JetBrains Mono", monospace;
-      color: #e6edf3;
+      color: var(--color-ink, #0b0b0c);
+      font-family: Inter, sans-serif;
     }
-    /* The terminal's last state, so the cut is invisible and the film can grow out of its line. */
+    /* The chat's last state, so the cut is invisible and the film can grow out of the attachment card. */
     #po-win {
       position: absolute;
-      left: 120px;
-      top: 90px;
-      width: 1680px;
-      height: 900px;
-      border-radius: 18px;
-      background: var(--color-term, #14171c);
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 30px 70px -20px rgba(0, 0, 0, 0.45);
+      left: 220px;
+      top: 70px;
+      width: 1480px;
+      height: 940px;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 30px 70px -20px rgba(0, 0, 0, 0.35);
       overflow: hidden;
     }
-    #po-bar {
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: rgba(230, 237, 243, 0.6);
-      background: rgba(255, 255, 255, 0.04);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    #po-out { position: absolute; left: 40px; right: 40px; top: 96px; }
-    .tl { height: 44px; line-height: 44px; font-size: 30px; white-space: pre; display: flex; align-items: center; }
-    .dim { color: rgba(230, 237, 243, 0.55); }
-    .green { color: #3fb950; }
-    .blue { color: #79c0ff; }
-    .yellow { color: #e3b341; }
-    .bar-track { display: inline-block; width: 480px; height: 14px; border-radius: 7px; background: #3fb950; margin: 0 16px; vertical-align: middle; }
-    /* The film: starts as a thumbnail growing out of the file line, becomes the frame. */
+    #po-head { height: 72px; display: flex; align-items: center; gap: 14px; padding: 0 32px; border-bottom: 1px solid rgba(0, 0, 0, 0.07); font-weight: 700; font-size: 28px; }
+    #po-head .dot { width: 14px; height: 14px; border-radius: 50%; background: #3fb950; }
+    #po-head .skill { font-weight: 500; color: var(--color-muted, #6e6e73); }
+    #po-thread { position: absolute; left: 40px; right: 40px; top: 72px; height: 758px; overflow: hidden; }
+    #po-scroll { position: absolute; left: 0; right: 0; top: 40px; transform: translateY(-420px); }
+    .ag-row { position: absolute; left: 0; right: 0; }
+    .ag-agent { display: flex; align-items: flex-start; gap: 22px; }
+    .ag-av { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--color-accent, #ff5a1f); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; }
+    .ag-text { font-size: 32px; font-weight: 500; line-height: 52px; white-space: nowrap; }
+    .ag-step { display: flex; align-items: center; gap: 18px; height: 60px; }
+    .ag-step .ok { flex: none; width: 36px; height: 36px; position: relative; border-radius: 50%; background: #3fb950; }
+    .ag-step .ok::after { content: ""; position: absolute; left: 11px; top: 6px; width: 9px; height: 16px; border: solid #fff; border-width: 0 4px 4px 0; transform: rotate(45deg); }
+    .ag-step .lbl { font-size: 30px; font-weight: 600; white-space: nowrap; }
+    .ag-step .cmd { font-family: "JetBrains Mono", monospace; font-size: 28px; color: var(--color-muted, #6e6e73); background: rgba(0, 0, 0, 0.05); border-radius: 12px; padding: 8px 14px; white-space: nowrap; line-height: 1; }
+    .ag-step .done { font-size: 28px; font-weight: 500; color: var(--color-muted, #6e6e73); white-space: nowrap; }
+    .bar-track { display: inline-block; width: 420px; height: 14px; border-radius: 7px; background: #3fb950; vertical-align: middle; }
+    #po-shot { position: absolute; left: 74px; top: 330px; width: 560px; height: 350px; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 20px 40px -18px rgba(0, 0, 0, 0.35); }
+    #po-shot img { display: block; width: 560px; height: 350px; }
+    #po-shot-cap { position: absolute; left: 660px; top: 330px; width: 600px; font-size: 28px; line-height: 1.35; color: var(--color-muted, #6e6e73); }
+    #po-card { position: absolute; left: 74px; top: 860px; width: 360px; height: 202px; border-radius: 14px; overflow: hidden; background: #0b0b0c; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 20px 40px -18px rgba(0, 0, 0, 0.4); }
+    #po-card img { display: block; width: 360px; height: 202px; object-fit: cover; }
+    #po-card-cap { position: absolute; left: 460px; top: 876px; font-size: 28px; line-height: 1.4; }
+    #po-card-cap b { font-weight: 700; }
+    #po-card-cap span { color: var(--color-muted, #6e6e73); }
+    #po-done { top: 1080px; }
+    #po-composer { position: absolute; left: 40px; right: 40px; bottom: 30px; height: 80px; border-radius: 40px; border: 2px solid rgba(0, 0, 0, 0.12); display: flex; align-items: center; padding: 0 12px 0 32px; font-size: 30px; font-weight: 500; color: rgba(11, 11, 12, 0.55); }
+    #po-composer .send { margin-left: auto; width: 56px; height: 56px; border-radius: 50%; background: var(--color-ink, #0b0b0c); }
+    /* The film: grows out of the attachment card until it is the frame. */
     #po-film {
       position: absolute;
       left: 0;
@@ -45,64 +56,47 @@
       width: 1920px;
       height: 1080px;
       transform-origin: 0 0;
-      border-radius: 18px;
+      border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.5);
     }
     #po-film video { display: block; width: 1920px; height: 1080px; object-fit: cover; }
-    #po-cursor {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 80px;
-      height: 80px;
-      z-index: 5;
-      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35));
-    }
+    #po-cursor { position: absolute; left: 0; top: 0; width: 80px; height: 80px; z-index: 5; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
   </style>
 
   <div id="root" data-composition-id="payoff" data-width="1920" data-height="1080">
     <div id="po-win" data-layout-allow-overflow>
-      <div id="po-bar">x-followers-video-skill — zsh</div>
-      <div id="po-out">
-          <div class="tl"><span class="dim">~/x</span> <span class="green">$</span> npx skills add serhiyhvala/x-followers-video-skill</div>
-          <div class="tl"><span class="yellow">●</span>  Skill: x-followers-video-skill</div>
-          <div class="tl"><span class="dim">   Turns an X follower milestone into a short, silent, polished MP4 …</span></div>
-          <div class="tl"><span class="green">✓</span> x-followers-video-skill <span class="dim">(copied) → ./.claude/skills/x-followers-video-skill</span></div>
-          <div class="tl"><span class="dim">~/x</span> <span class="green">$</span> <span class="dim"># on x.com: paste scripts/collect-x.js, once per page</span></div>
-          <div class="tl"><span class="dim">→</span> collected profile <span class="yellow">223</span></div>
-          <div class="tl"><span class="dim">→</span> collected followers <span class="yellow">60 people</span></div>
-          <div class="tl"><span class="dim">→</span> collected analytics <span class="yellow">7D</span> <span class="dim">· data.json copied</span></div>
-          <div class="tl"><span class="dim">~/x</span> <span class="green">$</span> node scripts/build.mjs --data data.json --template wall --aspect 16x9</div>
-          <div class="tl">built <span class="blue">wall-16x9</span> <span class="dim">-> out/wall-16x9</span></div>
-          <div class="tl"><span class="dim">  1920x1080 · 16.4s · scenes: intro@0, stats@7, finale@11.4</span></div>
-          <div class="tl"><span class="dim">~/x</span> <span class="green">$</span> npm run render</div>
-          <div class="tl"><span class="dim">  rendering</span><span class="bar-track"></span><span class="dim">100%</span></div>
-          <div class="tl"><span class="dim">  rendered in 19.2s</span></div>
-          <div class="tl"><span class="green">✔</span> <span class="blue" id="po-file" style="color:#fff">renders/wall-16x9.mp4</span></div>
+      <div id="po-head"><span class="dot"></span>Your agent <span class="skill">· x-followers-video-skill</span></div>
+      <div id="po-thread">
+        <div id="po-scroll">
+          <div id="po-shot"><img src="assets/followers.png" alt="" /></div>
+          <p id="po-shot-cap">Profile, the followers page and Analytics, read on your own logged-in x.com. Nothing leaves your machine; no paid API.</p>
+          <div class="ag-row ag-step" style="top: 720px; left: 74px"><span class="ok"></span><span class="lbl">Building wall, 16:9</span><span class="cmd">build.mjs --template wall --aspect 16x9</span><span class="done">16.4 s · 3 scenes</span></div>
+          <div class="ag-row ag-step" style="top: 790px; left: 74px"><span class="ok"></span><span class="lbl">Rendering</span><span class="bar-track"></span><span class="done">rendered in 19.2 s</span></div>
+          <div id="po-card"><img src="assets/wall-poster.jpg" alt="" /></div>
+          <p id="po-card-cap"><b>wall-16x9.mp4</b><br /><span>16.4 s · 1920×1080 · silent</span></p>
+          <div class="ag-row ag-agent" id="po-done"><div class="ag-av">✦</div><div class="ag-text">Done. Every one of them is in it.</div></div>
+        </div>
       </div>
+      <div id="po-composer">Message your agent<span class="send"></span></div>
     </div>
     <svg id="po-cursor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 8.5-6.2 1.6L9 20z" fill="#0b0b0c" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" /></svg>
     <div id="po-film" data-layout-allow-overflow data-layout-allow-occlusion data-motion-blur="off">
-      <video id="po-video" class="clip" src="assets/clips/wall.mp4" muted playsinline data-start="0" data-duration="6" data-media-start="10.6"></video>
+      <video id="po-video" class="clip" src="assets/clips/wall.mp4" muted playsinline data-start="0" data-duration="6" data-media-start="10.4"></video>
     </div>
   </div>
 
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
-      // The cursor enters from the right, clicks the file name at 0.55 s.
-      tl.fromTo("#po-cursor", { x: 2000, y: 700 }, { x: 300, y: 800, duration: 0.5, ease: "power3.out" }, 0.05);
-      tl.to("#po-cursor", { scale: 0.86, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "20% 15%" }, 0.55);
-      tl.fromTo("#po-file", { color: "#ffffff" }, { color: "#ff5a1f", duration: 0.12 }, 0.55);
-      // The film grows out of the clicked line until it is the frame (zoom through, strong ease-in).
-      tl.fromTo("#po-film", { x: 170, y: 790, scale: 0.02, opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.62);
-      tl.to("#po-film", { x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.in" }, 0.64);
-      tl.to("#po-cursor", { opacity: 0, duration: 0.1 }, 0.7);
-      tl.to("#po-win", { scale: 1.08, filter: "blur(14px)", duration: 0.5, ease: "power2.in", transformOrigin: "50% 50%" }, 0.64);
-      tl.fromTo("#po-film", { borderRadius: 18 }, { borderRadius: 0, duration: 0.2 }, 1.0);
-      // Once the film is the frame, the window under it is gone (nothing hidden is left to sample).
-      tl.to(["#po-win", "#po-cursor"], { opacity: 0, duration: 0.05 }, 1.15);
+      // The card sits at (334, 622) in the frame, 360 px wide: the film starts exactly there, then zooms through.
+      gsap.set("#po-cursor", { x: 470, y: 660 });
+      tl.fromTo("#po-film", { x: 334, y: 622, scale: 0.1875, opacity: 1 }, { x: 0, y: 0, scale: 1, duration: 0.5, ease: "power3.in" }, 0.05);
+      tl.to("#po-cursor", { opacity: 0, duration: 0.1 }, 0.1);
+      tl.to("#po-win", { scale: 1.08, filter: "blur(14px)", duration: 0.55, ease: "power2.in", transformOrigin: "50% 50%" }, 0.05);
+      tl.fromTo("#po-film", { borderRadius: 14 }, { borderRadius: 0, duration: 0.2 }, 0.4);
+      // Once the film is the frame, nothing is left under it to sample.
+      tl.to(["#po-win", "#po-cursor"], { opacity: 0, duration: 0.05 }, 0.6);
       window.__timelines["payoff"] = tl;
     })();
   </script>
