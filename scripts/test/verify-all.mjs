@@ -11,9 +11,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", ".
 const argv = process.argv.slice(2);
 const tFlag = argv.indexOf("--templates");
 const templates = tFlag >= 0 ? argv[tFlag + 1].split(",") : listTemplates().map((t) => t.name);
-const data = argv.find((a, i) => !a.startsWith("--") && i !== tFlag + 1) ?? path.join(ROOT, "examples", "data.json");
+const data = argv.find((a, i) => !a.startsWith("--") && (tFlag < 0 || i !== tFlag + 1)) ?? path.join(ROOT, "examples", "data.json");
 const render = !argv.includes("--no-render");
-const outRoot = path.join(ROOT, "out", "verify");
+const outRoot = path.join(ROOT, "out", "verify", path.basename(data, ".json"));
 const rows = [];
 let failed = 0;
 

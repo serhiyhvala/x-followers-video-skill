@@ -11,7 +11,13 @@
       HEIGHTS.forEach((h, i) => {
         if (i >= BEFORE) gsap.set("#rl-" + i, { clipPath: "inset(100% 0 0 0)", autoAlpha: 0 });
       });
-      if ({{reelsSettled}}) STRIPS.forEach((s, pos) => gsap.set("#rdg-" + pos, { yPercent: -(100 * (s.length - 1)) / s.length }));
+      if ({{reelsSettled}}) {
+        STRIPS.forEach((s, pos) => {
+          const strip = document.getElementById("rdg-" + pos);
+          gsap.set(strip, { yPercent: -(100 * (s.length - 1)) / s.length });
+          gsap.set(Array.from(strip.children).slice(0, -1), { autoAlpha: 0 }); // glyphs that rolled out of the slot
+        });
+      }
       // Lines that have risen above the frame are hidden, so nothing is sampled where nothing shows.
       const viewH = {{viewH}}; // never read layout here: HyperFrames mounts the scene before it is laid out
       const tops = [];

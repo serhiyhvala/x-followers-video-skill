@@ -30,6 +30,8 @@
         if (first[pos]) tl.fromTo("#rdg-" + pos, { yPercent: 0 }, to, TICK_T[k]);
         else tl.to("#rdg-" + pos, to, TICK_T[k]);
         first[pos] = false;
+        // The glyph that rolled out of the slot is hidden, so nothing clipped is ever sampled.
+        tl.set(document.getElementById("rdg-" + pos).children[idx[pos] - 1], { autoAlpha: 0 }, TICK_T[k] + tick.duration);
       });
       const landed = TICK_T.length ? TICK_T[TICK_T.length - 1] + 0.3 : {{numberAt}} + 0.4;
       tl.fromTo("#rl-total", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.05, duration: 0.1, ease: "power2.out" }, landed);

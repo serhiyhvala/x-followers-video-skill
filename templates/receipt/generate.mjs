@@ -113,7 +113,7 @@ export default function generate(ctx) {
   const tickTimes = [];
   for (let i = numberIndex + 1; i < printEnd - 1; i++) {
     times[i] = t += 0.45;
-    tickTimes.push(times[i] + 0.1);
+    tickTimes.push(times[i] + 0.3);
   }
   times[printEnd - 1] = t + 0.2;
   const printDur = Math.round((t + 1.6) * 10) / 10;

@@ -329,6 +329,8 @@
         if (first[pos]) tl.fromTo("#dg-" + pos, { yPercent: 0 }, to, TICK_T[k]);
         else tl.to("#dg-" + pos, to, TICK_T[k]);
         first[pos] = false;
+        // The glyph that rolled out of the slot is hidden, so nothing clipped is ever sampled.
+        tl.set(document.getElementById("dg-" + pos).children[idx[pos] - 1], { autoAlpha: 0 }, TICK_T[k] + tick.duration);
       });
       // The number lands: accent flood, one spring punch from its centre, then still.
       tl.fromTo("#intro-num", { color: INK }, { color: ACCENT, duration: 0.24, ease: "power2.inOut" }, 1.2);

@@ -211,8 +211,8 @@ function playerHtml(v) {
 <style>
   :root { ${vars} }
   html, body { margin: 0; height: 100%; background: #1a1a1a; overflow: hidden; font-family: Inter, system-ui, sans-serif; }
-  #stage-wrap { position: absolute; inset: 0; display: grid; place-items: center; }
-  #stage { position: relative; width: ${v.W}px; height: ${v.H}px; overflow: hidden; background: #fff; transform-origin: 50% 50%; }
+  #stage-wrap { position: absolute; inset: 0; overflow: hidden; }
+  #stage { position: absolute; left: 50%; top: 50%; width: ${v.W}px; height: ${v.H}px; margin: -${v.H / 2}px 0 0 -${v.W / 2}px; overflow: hidden; background: #fff; transform-origin: 50% 50%; }
   .xmv-host { position: absolute; inset: 0; display: none; }
   .xmv-host.on { display: block; }
   #bar { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 10px; align-items: center;

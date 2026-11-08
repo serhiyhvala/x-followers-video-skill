@@ -111,10 +111,13 @@
       });
 
       // Slow counter-rotating orbit; each photo counter-spins so faces stay upright.
-      tl.fromTo("#fin-ring-in", { rotation: 0 }, { rotation: 16, duration: D, ease: "none" }, 0);
-      tl.fromTo("#fin-ring-in .fa img", { rotation: 0 }, { rotation: -16, duration: D, ease: "none" }, 0);
-      tl.fromTo("#fin-ring-out", { rotation: 0 }, { rotation: -11, duration: D, ease: "none" }, 0);
-      tl.fromTo("#fin-ring-out .fa img", { rotation: 0 }, { rotation: 11, duration: D, ease: "none" }, 0);
+      const orbit = (ring, deg) => {
+        if (!document.querySelector(ring + " .fa")) return; // no followers: no ring
+        tl.fromTo(ring, { rotation: 0 }, { rotation: deg, duration: D, ease: "none" }, 0);
+        tl.fromTo(ring + " .fa img", { rotation: 0 }, { rotation: -deg, duration: D, ease: "none" }, 0);
+      };
+      orbit("#fin-ring-in", 16);
+      orbit("#fin-ring-out", -11);
 
       // The number lands, then the thank-you reads word by word.
       tl.fromTo("#fin-num", { opacity: 0, scale: 1.3, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0.3);
