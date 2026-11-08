@@ -9,7 +9,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { loadMilestone, tiers, DataError } from "./lib/data.mjs";
 import { avatarSvg } from "./lib/avatars.mjs";
-import { render } from "./lib/template.mjs";
+import { render, expandIncludes } from "./lib/template.mjs";
 import * as fmt from "./lib/format.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -129,7 +129,7 @@ export async function build({ data, template, aspect, out, quiet = false }) {
   fs.writeFileSync(path.join(outDir, "index.html"), render(indexSrc, vars, "index.html"));
   const sceneSources = {};
   for (const s of scenes) {
-    const src = fs.readFileSync(path.join(tdir, "compositions", s.file), "utf8");
+    const src = expandIncludes(fs.readFileSync(path.join(tdir, "compositions", s.file), "utf8"), path.join(tdir, "partials"), s.file);
     const sceneVars = { ...vars, ...(s.vars ?? {}), sceneId: s.id, sceneDuration: s.duration };
     sceneSources[s.id] = render(src, sceneVars, s.file);
     fs.writeFileSync(path.join(outDir, "compositions", s.file), sceneSources[s.id]);

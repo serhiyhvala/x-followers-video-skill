@@ -1,0 +1,41 @@
+<template>
+  <style>
+{{include:receipt.css}}
+    #print-stage {
+      position: absolute;
+      inset: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="print" data-width="{{W}}" data-height="{{H}}">
+    <div id="print-stage" class="{{rootClass}}">
+{{include:receipt.html}}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+{{include:feed.js}}
+
+      // The total is a mechanical counter: it ticks once per newest-follower line.
+      const TICKS = {{ticksJson}};
+      const TICK_T = {{tickTimesJson}};
+      const tick = { duration: 0.28, ease: "power3.out" };
+      const idx = STRIPS.map(() => 0);
+      const first = STRIPS.map(() => true);
+      TICKS.forEach(({ pos, tick: k }) => {
+        idx[pos] += 1;
+        const to = { yPercent: -(100 * idx[pos]) / STRIPS[pos].length, ...tick };
+        if (first[pos]) tl.fromTo("#rdg-" + pos, { yPercent: 0 }, to, TICK_T[k]);
+        else tl.to("#rdg-" + pos, to, TICK_T[k]);
+        first[pos] = false;
+      });
+      const landed = TICK_T.length ? TICK_T[TICK_T.length - 1] + 0.3 : {{numberAt}} + 0.4;
+      tl.fromTo("#rl-total", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.05, duration: 0.1, ease: "power2.out" }, landed);
+      tl.to("#rl-total", { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, landed + 0.1);
+
+      window.__timelines["print"] = tl;
+    })();
+  </script>
+</template>

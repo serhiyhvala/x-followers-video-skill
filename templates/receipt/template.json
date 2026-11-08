@@ -1,0 +1,7 @@
+{
+  "title": "Receipt",
+  "description": "A thermal printer feeds a receipt: every follower is a line item, the milestone is the total that ticks as the newest three print, stats are the totals, THANK YOU and a barcode close it.",
+  "fps": 30,
+  "accent": "#D7263D",
+  "font": "Space Mono"
+}

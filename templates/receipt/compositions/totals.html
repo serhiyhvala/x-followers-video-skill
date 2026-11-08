@@ -1,0 +1,23 @@
+<template>
+  <style>
+{{include:receipt.css}}
+    #totals-stage {
+      position: absolute;
+      inset: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="totals" data-width="{{W}}" data-height="{{H}}">
+    <div id="totals-stage" class="{{rootClass}}">
+{{include:receipt.html}}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+{{include:feed.js}}
+      window.__timelines["totals"] = tl;
+    })();
+  </script>
+</template>

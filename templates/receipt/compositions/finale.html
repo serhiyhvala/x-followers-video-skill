@@ -1,0 +1,36 @@
+<template>
+  <style>
+{{include:receipt.css}}
+    #fin-stage {
+      position: absolute;
+      inset: 0;
+    }
+  </style>
+
+  <div id="root" data-composition-id="finale" data-width="{{W}}" data-height="{{H}}">
+    <div id="fin-stage" class="{{rootClass}}">
+{{include:receipt.html}}
+      <div id="rc-stamp" data-layout-allow-overlap data-layout-allow-occlusion>{{milestoneText}} ✓</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+{{include:feed.js}}
+
+      // Tear: the strip comes off the slot and settles higher; the stamp lands on it.
+      const TEAR_AT = {{tearAt}};
+      tl.to(paper, { y: -emerged - 90, rotation: 1.4, transformOrigin: "50% 100%", duration: 0.55, ease: "power3.out" }, TEAR_AT);
+      tl.fromTo(
+        "#rc-stamp",
+        { opacity: 0, scale: 2.2, rotation: -14, x: "-50%", y: {{H}} - {{bodyH}} - 330 },
+        { opacity: 0.92, scale: 1, rotation: -8, duration: 0.28, ease: "power4.in" },
+        TEAR_AT + 0.35,
+      );
+      tl.to("#rc-stamp", { scale: 0.96, duration: 0.18, ease: "power2.out" }, TEAR_AT + 0.63);
+
+      window.__timelines["finale"] = tl;
+    })();
+  </script>
+</template>

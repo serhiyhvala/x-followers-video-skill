@@ -1,0 +1,162 @@
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-ground, #3e5c50);
+      color: var(--color-ink, #1f1f1f);
+      font-family: "Space Mono", "Noto Sans JP", monospace;
+    }
+    /* The printer: a desktop unit at the bottom; the paper rises out of the slot on its top. */
+    #rc-body {
+      position: absolute;
+      left: {{bodyLeft}}px;
+      bottom: -40px;
+      width: {{bodyW}}px;
+      height: {{bodyH}}px;
+      padding-bottom: 40px;
+      border-radius: 30px 30px 0 0;
+      background: #2a2e33;
+      box-shadow: 0 -24px 50px -16px rgba(0, 0, 0, 0.45);
+      z-index: 3;
+    }
+    #rc-slot {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 22px;
+      height: 10px;
+      border-radius: 5px;
+      background: #121417;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    #rc-led {
+      position: absolute;
+      right: 54px;
+      top: 60px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #43d17a;
+      box-shadow: 0 0 0 3px rgba(67, 209, 122, 0.18);
+    }
+    /* The paper viewport ends at the slot; the strip rises through it, newest line at the bottom. */
+    #rc-view {
+      position: absolute;
+      left: {{paperLeft}}px;
+      top: -200px;
+      width: {{paperW}}px;
+      height: calc({{H}}px - {{bodyH}}px + 200px + 22px);
+      overflow: hidden;
+      z-index: 2;
+    }
+    #rc-paper {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      width: {{paperW}}px;
+      padding: 60px 48px 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-paper, #fbfaf6);
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+      font-size: 30px;
+      line-height: 44px;
+    }
+    .rl {
+      position: relative;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex: none;
+    }
+    .rl-row { gap: 12px; }
+    .rl-l { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+    .rl-dots { flex: 1 1 0; min-width: 24px; border-bottom: 2px dotted rgba(31, 31, 31, 0.35); height: 0; margin-bottom: 8px; }
+    .rl-r { flex: none; }
+    .rl-text { justify-content: flex-start; }
+    .rl-text .rl-center { width: 100%; text-align: center; }
+    .rl-bold { font-weight: 700; }
+    .rl-muted { color: rgba(31, 31, 31, 0.6); }
+    .rl-num { color: rgba(31, 31, 31, 0.6); }
+    .rl-divider::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      border-top: 2px dashed rgba(31, 31, 31, 0.3);
+    }
+    .rl-number {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 6px;
+    }
+    .rl-total-label {
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 44px;
+    }
+    .rl-total {
+      display: flex;
+      font-size: {{numFont}}px;
+      font-weight: 700;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .dg {
+      display: block;
+      width: {{slotW}}px;
+      height: {{slotH}}px;
+      overflow: hidden;
+    }
+    .dg-strip {
+      display: flex;
+      flex-direction: column;
+    }
+    .dg-strip span {
+      display: block;
+      height: {{slotH}}px;
+      line-height: {{slotH}}px;
+      text-align: center;
+    }
+    .rl-thanks {
+      justify-content: center;
+      gap: 0.3em;
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .rl-barcode {
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+    .rl-barcode svg { display: block; fill: var(--color-ink, #1f1f1f); }
+    .rl-code { font-size: 28px; letter-spacing: 0.3em; color: rgba(31, 31, 31, 0.7); }
+    .rl-tear::after {
+      content: "";
+      position: absolute;
+      left: -48px;
+      right: -48px;
+      bottom: -1px;
+      height: 20px;
+      background: radial-gradient(circle at 12px 20px, var(--color-ground, #3e5c50) 9px, transparent 10px) 0 0 / 24px 20px repeat-x;
+    }
+    #rc-stamp {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      padding: 10px 26px;
+      border: 6px solid var(--color-accent, #d7263d);
+      border-radius: 14px;
+      color: var(--color-accent, #d7263d);
+      font-weight: 700;
+      font-size: 54px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      z-index: 4;
+      opacity: 0;
+      transform-origin: 50% 50%;
+    }
