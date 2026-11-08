@@ -15,12 +15,19 @@ photos). With real follower photos the wall and the mosaic look considerably bet
 
 ## Install
 
+With the [skills](https://skills.sh) CLI, into the current project (add `-g` for user-level, `-a '*'` for every agent):
+
+```bash
+npx skills add serhiyhvala/x-followers-video-skill
+```
+
+Or clone it where your agent looks for skills:
+
 ```bash
 git clone https://github.com/serhiyhvala/x-followers-video-skill ~/.claude/skills/x-followers-video-skill
 ```
 
-Or into a project's `.claude/skills/`. Any agent that reads `SKILL.md` files works (Claude Code,
-Codex, Cursor and others). Nothing to `npm install`: the scripts are plain Node 22+, and the renderer runs
+Any agent that reads `SKILL.md` files works (Claude Code, Codex, Cursor and others). Nothing to `npm install`: the scripts are plain Node 22+, and the renderer runs
 as `npx hyperframes@0.9.23`. Chrome is downloaded by HyperFrames on first use; FFmpeg must be installed
 (`brew install ffmpeg`, `apt install ffmpeg`, `choco install ffmpeg`).
 
