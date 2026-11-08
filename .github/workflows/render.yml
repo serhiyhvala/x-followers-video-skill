@@ -1,7 +1,7 @@
-# Renders a milestone video on GitHub's runners, for machines that cannot run Chrome or FFmpeg.
-# Put your data.json (and pfp/ photos) in a PRIVATE copy of this repo, then Actions → "Render milestone video"
+# Renders a followers video on GitHub's runners, for machines that cannot run Chrome or FFmpeg.
+# Put your data.json (and pfp/ photos) in a PRIVATE copy of this repo, then Actions → "Render followers video"
 # → Run workflow. The MP4 is attached to the run as an artifact. Without a data.json it renders the sample.
-name: Render milestone video
+name: Render followers video
 
 on:
   workflow_dispatch:
@@ -53,6 +53,6 @@ jobs:
           ls -la renders
       - uses: actions/upload-artifact@v4
         with:
-          name: milestone-videos
+          name: followers-videos
           path: renders/*.mp4
           retention-days: 14

@@ -24,7 +24,7 @@ async function download(url, dest) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 20000);
   try {
-    const res = await fetch(url, { signal: ctrl.signal, headers: { "user-agent": "x-milestone-video/1.0" } });
+    const res = await fetch(url, { signal: ctrl.signal, headers: { "user-agent": "x-followers-video-skill/1.0" } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const buf = Buffer.from(await res.arrayBuffer());
     if (buf.length < 200) throw new Error("empty response");

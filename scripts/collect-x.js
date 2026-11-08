@@ -1,4 +1,4 @@
-/* x-milestone-video · collect-x.js
+/* x-followers-video-skill · collect-x.js
  *
  * Paste this whole file into the DevTools console on x.com (F12 → Console → paste → Enter), once per page:
  *   1. https://x.com/<your handle>            → follower count, your name and photo

@@ -1,4 +1,4 @@
-# x-milestone-video
+# x-followers-video-skill
 
 An agent skill that turns an X (Twitter) follower milestone into a short, silent, polished video.
 Four templates, each in 16:9 and 9:16, rendered by [HyperFrames](https://hyperframes.heygen.com)
@@ -16,7 +16,7 @@ photos). With real follower photos the wall and the mosaic look considerably bet
 ## Install
 
 ```bash
-git clone https://github.com/serhiyhvala/x-milestone-video ~/.claude/skills/x-milestone-video
+git clone https://github.com/serhiyhvala/x-followers-video-skill ~/.claude/skills/x-followers-video-skill
 ```
 
 Or into a project's `.claude/skills/`. Any agent that reads `SKILL.md` files works (Claude Code,
@@ -26,7 +26,7 @@ as `npx hyperframes@0.9.23`. Chrome is downloaded by HyperFrames on first use; F
 
 ## Use
 
-Ask your agent for a follower-milestone video. By hand:
+Ask your agent for a video of your X followers milestone. By hand:
 
 ```bash
 node scripts/doctor.mjs                      # what is missing, and the fallback for each gap
@@ -62,7 +62,7 @@ Ways to fill it, easiest first:
   GSAP), press Space, and screen-record it. `?rec` hides the controls, `?t=8.5` opens at a time.
 - **Docker**: `npm run render:docker` inside the build.
 - **GitHub Actions**: fork this repo **privately**, add your `data.json` (and `pfp/`), then
-  Actions → *Render milestone video* → Run workflow. The MP4 is attached as an artifact. The workflow
+  Actions → *Render followers video* → Run workflow. The MP4 is attached as an artifact. The workflow
   renders the sample data when no `data.json` exists.
 
 ## Verify

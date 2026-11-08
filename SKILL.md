@@ -1,9 +1,9 @@
 ---
-name: x-milestone-video
+name: x-followers-video-skill
 description: Turns an X (Twitter) follower milestone (100, 160, 1,000...) into a short, silent, polished MP4 from a data.json, with four visual templates (wall, mosaic, receipt, terminal) in 16:9 and 9:16, rendered by the pinned HyperFrames CLI through npx. Use when someone wants a follower-milestone video, a "thank you for N followers" clip, or a video of their newest followers and 7-day X analytics. No paid X API; works with a browser, a pasted console snippet, a CSV, or just the number.
 ---
 
-# X milestone video
+# X followers video
 
 The agent never writes HyperFrames code. It fills `data.json`, runs `build.mjs`, and renders the project
 the build wrote. Every number on screen comes from `data.json`; the only required field is `milestone`.
@@ -54,7 +54,7 @@ the build wrote. Every number on screen comes from `data.json`; the only require
 - **`doctor` says Chrome or FFmpeg is missing and the person cannot install them**: build anyway, then
   (a) open `<project>/player/index.html` in any browser (needs internet for GSAP) and screen-record, or
   (b) `npm run render:docker` with Docker running, or (c) push a private copy of this repo with their
-  `data.json` and run the GitHub Actions workflow "Render milestone video"; the MP4 is an artifact.
+  `data.json` and run the GitHub Actions workflow "Render followers video"; the MP4 is an artifact.
 - **The collector returns empty fields**: X changed its DOM. The selectors are one object at the top of
   `scripts/collect-x.js`; fix them there, re-run `node scripts/test/collect-test.mjs`.
 - **Names do not fit**: cards shrink then ellipsize, receipt and terminal lines ellipsize; nothing wraps

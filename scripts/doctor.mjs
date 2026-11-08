@@ -71,7 +71,7 @@ const ok = checks.every((c) => c.ok);
 const fallbacks = [
   "No local render? Open <project>/player/index.html in any browser and screen-record it (needs internet for GSAP).",
   docker ? "Docker is running: `npm run render:docker` inside the built project renders in a container." : "With Docker running, `npm run render:docker` inside the built project renders in a container.",
-  "Push a private copy of this repo with your data.json and run the GitHub Actions workflow `Render milestone video`.",
+  "Push a private copy of this repo with your data.json and run the GitHub Actions workflow `Render followers video`.",
 ];
 
 if (args.has("--json")) {
